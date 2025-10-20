@@ -1,6 +1,6 @@
 name: metro
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -11,6 +11,12 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   get: ^4.7.2
+  http: ^1.1.0 # Call API
+  shared_preferences: ^2.5.3 # Simpan data lokal
+  firebase_core: ^4.1.1 # firebase core
+  firebase_auth: ^6.1.0 # firebase auth
+  url_launcher: ^6.2.5 # Open URL
+  google_sign_in: ^6.1.6 # Google Auth Sign-in
 
 dev_dependencies:
   flutter_test:

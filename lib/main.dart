@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
+import 'package:metro/controller/auth_controller.dart';
 import 'package:metro/routes/app_pages.dart';
+import 'package:metro/services/auth_service.dart';
+import 'package:metro/services/session_manager.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SessionManager.init();
+  await AuthService.init();
+  Get.put(AuthController());
   runApp(const MyApp());
 }
 

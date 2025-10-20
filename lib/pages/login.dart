@@ -1,15 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:metro/controller/auth_controller.dart';
 import '../routes/app_routes.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+  State<Login> createState() => _LoginState();
+}
 
+class _LoginState extends State<Login> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool obscurePassword = true;
+  final authController = Get.find<AuthController>();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleLogin() async {
+    final success = await authController.login(
+      emailController.text.trim(),
+      passwordController.text,
+    );
+
+    if (mounted) {
+      if (success) {
+        Get.offAllNamed(AppRoutes.mainPage);
+      } else {
+        Get.snackbar(
+          'Login Gagal',
+          authController.errorMessage,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    }
+  }
+
+  void _handleGoogleLogin() async {
+    final success = await authController.loginWithGoogle();
+
+    if (mounted) {
+      if (success) {
+        Get.offAllNamed(AppRoutes.mainPage);
+      } else {
+        Get.snackbar(
+          'Google Login Gagal',
+          authController.errorMessage.isEmpty
+              ? 'Silakan coba lagi'
+              : authController.errorMessage,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -40,7 +98,7 @@ class Login extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
+                    const Text(
                       'Login',
                       style: TextStyle(
                         color: Colors.black,
@@ -48,7 +106,6 @@ class Login extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
                     const SizedBox(height: 20),
 
                     // Email field
@@ -90,17 +147,28 @@ class Login extends StatelessWidget {
                           child: TextField(
                             controller: passwordController,
                             keyboardType: TextInputType.visiblePassword,
-                            obscureText: true,
-                            decoration: const InputDecoration(
+                            obscureText: obscurePassword,
+                            decoration: InputDecoration(
                               labelText: 'Password',
-                              suffixIcon: Icon(Icons.visibility_off),
-                              border: UnderlineInputBorder(
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscurePassword = !obscurePassword;
+                                  });
+                                },
+                              ),
+                              border: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
-                              enabledBorder: UnderlineInputBorder(
+                              enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
-                              focusedBorder: UnderlineInputBorder(
+                              focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.blue,
                                   width: 2,
@@ -111,7 +179,6 @@ class Login extends StatelessWidget {
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 10),
 
                     // Forgot password link
@@ -127,28 +194,43 @@ class Login extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
 
                     // Login button
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    Obx(
+                      () => ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: authController.isLoading
+                              ? Colors.grey
+                              : Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: () {
-                        // contoh navigasi ke home setelah login
-                        Get.offAllNamed(AppRoutes.home);
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        onPressed: authController.isLoading
+                            ? null
+                            : _handleLogin,
+                        child: authController.isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
 
                     // OR separator
@@ -162,26 +244,31 @@ class Login extends StatelessWidget {
                         Expanded(child: Divider(thickness: 1)),
                       ],
                     ),
-
                     const SizedBox(height: 20),
 
                     // Login with Google button
-                    OutlinedButton.icon(
-                      icon: Image.asset('assets/images/google.png', height: 20),
-                      label: const Text(
-                        'Login with Google',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    Obx(
+                      () => OutlinedButton.icon(
+                        icon: Image.asset(
+                          'assets/images/google.png',
+                          height: 20,
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        label: const Text(
+                          'Login with Google',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.grey),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        onPressed: authController.isLoading
+                            ? null
+                            : _handleGoogleLogin,
                       ),
-                      onPressed: () {},
                     ),
-
                     const SizedBox(height: 25),
 
                     // Register text
