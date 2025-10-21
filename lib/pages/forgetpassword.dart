@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/auth_controller.dart';
 
-
 class Forgetpassword extends StatefulWidget {
   const Forgetpassword({super.key});
 
@@ -25,37 +24,27 @@ class _ForgetpasswordState extends State<Forgetpassword> {
 
     if (email.isEmpty) {
       Get.snackbar(
-        'Error',
-        'Email harus diisi',
-        backgroundColor: Colors.redAccent,
+        'Perhatian',
+        'Email wajib diisi',
+        backgroundColor: Colors.orange,
         colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
+        duration: const Duration(seconds: 2),
       );
       return;
     }
 
-    if (!GetUtils.isEmail(email)) {
-      Get.snackbar(
-        'Error',
-        'Format email tidak valid',
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    final result = await authController.forgotPassword(email);
+    final response = await authController.forgotPassword(email);
 
     if (mounted) {
-      if (result['success'] == true) {
+      if (response['success'] == true) {
         Get.snackbar(
-          'Success',
-          result['message'] ??
+          'Berhasil',
+          response['message'] ??
               'Link reset password telah dikirim ke email Anda',
           backgroundColor: Colors.green,
           colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
         await Future.delayed(const Duration(seconds: 2));
@@ -63,10 +52,10 @@ class _ForgetpasswordState extends State<Forgetpassword> {
       } else {
         Get.snackbar(
           'Gagal',
-          result['message'] ?? 'Terjadi kesalahan. Silakan coba lagi.',
+          response['message'] ?? 'Terjadi kesalahan. Silakan coba lagi.',
           backgroundColor: Colors.redAccent,
           colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
       }
@@ -81,7 +70,10 @@ class _ForgetpasswordState extends State<Forgetpassword> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: Column(
         children: [
@@ -146,15 +138,15 @@ class _ForgetpasswordState extends State<Forgetpassword> {
                           child: TextField(
                             controller: forgotpasswordController,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Email Address',
-                              border: const UnderlineInputBorder(
+                              border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
-                              enabledBorder: const UnderlineInputBorder(
+                              enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
-                              focusedBorder: const UnderlineInputBorder(
+                              focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.blue,
                                   width: 2,

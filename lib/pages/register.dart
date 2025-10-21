@@ -28,49 +28,8 @@ class _RegisterState extends State<Register> {
     super.dispose();
   }
 
-  bool _validateInputs() {
-    if (emailController.text.isEmpty ||
-        firstnameController.text.isEmpty ||
-        passwordController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Email, nama depan, dan password harus diisi',
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return false;
-    }
-
-    if (!GetUtils.isEmail(emailController.text.trim())) {
-      Get.snackbar(
-        'Error',
-        'Format email tidak valid',
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return false;
-    }
-
-    if (passwordController.text.length < 8) {
-      Get.snackbar(
-        'Error',
-        'Password minimal 8 karakter',
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return false;
-    }
-
-    return true;
-  }
-
   void _handleRegister() async {
-    if (!_validateInputs()) return;
-
-    final result = await authController.register(
+    final response = await authController.register(
       firstnameController.text.trim(),
       surnameController.text.trim(),
       emailController.text.trim(),
@@ -78,24 +37,26 @@ class _RegisterState extends State<Register> {
     );
 
     if (mounted) {
-      if (result['success'] == true) {
+      if (response['success'] == true) {
         Get.snackbar(
-          'Success',
-          result['message'] ?? 'Registrasi berhasil',
+          'Berhasil',
+          response['message'] ??
+              'Registrasi berhasil. Silakan cek email untuk verifikasi.',
           backgroundColor: Colors.green,
           colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 3),
         );
         await Future.delayed(const Duration(seconds: 2));
         Get.offNamed(AppRoutes.login);
       } else {
         Get.snackbar(
           'Registrasi Gagal',
-          result['message'] ?? 'Terjadi kesalahan saat registrasi',
+          response['message'] ?? 'Terjadi kesalahan saat registrasi',
           backgroundColor: Colors.redAccent,
           colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 3),
         );
       }
     }
@@ -109,7 +70,10 @@ class _RegisterState extends State<Register> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

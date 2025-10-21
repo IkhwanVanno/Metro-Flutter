@@ -52,7 +52,10 @@ class AuthService {
     }
   }
 
-  static Future<bool> login(String email, String password) async {
+  static Future<Map<String, dynamic>> login(
+    String email,
+    String password,
+  ) async {
     try {
       final url = Uri.parse('${AppConfig.baseUrl}/login');
       final response = await http.post(
@@ -64,35 +67,49 @@ class AuthService {
         body: jsonEncode({'email': email, 'password': password}),
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _currentUser = Member.fromJson(data['user']);
+      final data = jsonDecode(response.body);
 
+      if (response.statusCode == 200 && data['success'] == true) {
+        _currentUser = Member.fromJson(data['user']);
         final cookie = response.headers['set-cookie'];
         await SessionManager.saveSession(data['user'], cookie);
-
         _notifyAllAuthStateListeners();
-        return true;
+
+        return {
+          'statusCode': response.statusCode,
+          'success': true,
+          'message': data['message'] ?? 'Login berhasil',
+          'user': data['user'],
+        };
       } else {
-        print('Login failed with status: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        return false;
+        return {
+          'statusCode': response.statusCode,
+          'success': false,
+          'message': data['error'] ?? data['message'] ?? 'Login gagal',
+        };
       }
     } catch (e) {
       print('Login error: $e');
-      return false;
+      return {
+        'statusCode': 500,
+        'success': false,
+        'message': 'Terjadi kesalahan koneksi',
+      };
     }
   }
 
-  static Future<bool> loginWithGoogle() async {
+  static Future<Map<String, dynamic>> loginWithGoogle() async {
     try {
       await _googleSignIn.signOut();
 
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
-        print('Google Sign-In cancelled by user');
-        return false;
+        return {
+          'statusCode': 401,
+          'success': false,
+          'message': 'Login Google dibatalkan',
+        };
       }
 
       final GoogleSignInAuthentication googleAuth =
@@ -114,29 +131,40 @@ class AuthService {
         }),
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _currentUser = Member.fromJson(data['user']);
+      final data = jsonDecode(response.body);
 
+      if (response.statusCode == 200 && data['success'] == true) {
+        _currentUser = Member.fromJson(data['user']);
         final cookie = response.headers['set-cookie'];
         await SessionManager.saveSession(data['user'], cookie);
-
         _notifyAllAuthStateListeners();
-        return true;
+
+        return {
+          'statusCode': response.statusCode,
+          'success': true,
+          'message': data['message'] ?? 'Login Google berhasil',
+          'user': data['user'],
+        };
       } else {
-        print('Google login failed: ${response.statusCode}');
-        print('Response: ${response.body}');
         await _googleSignIn.signOut();
-        return false;
+        return {
+          'statusCode': response.statusCode,
+          'success': false,
+          'message': data['error'] ?? data['message'] ?? 'Login Google gagal',
+        };
       }
     } catch (e) {
       print('Google Sign-In error: $e');
       await _googleSignIn.signOut();
-      return false;
+      return {
+        'statusCode': 500,
+        'success': false,
+        'message': 'Terjadi kesalahan saat login dengan Google',
+      };
     }
   }
 
-  static Future<bool> register(
+  static Future<Map<String, dynamic>> register(
     String firstName,
     String lastName,
     String email,
@@ -158,15 +186,30 @@ class AuthService {
         }),
       );
 
-      return response.statusCode == 201;
+      final data = jsonDecode(response.body);
+
+      return {
+        'statusCode': response.statusCode,
+        'success': response.statusCode == 201 && data['success'] == true,
+        'message': data['success'] == true
+            ? (data['message'] ?? 'Registrasi berhasil')
+            : (data['error'] ?? data['message'] ?? 'Registrasi gagal'),
+        if (data['data'] != null) 'data': data['data'],
+      };
     } catch (e) {
       print('Register error: $e');
-      return false;
+      return {
+        'statusCode': 500,
+        'success': false,
+        'message': 'Terjadi kesalahan koneksi',
+      };
     }
   }
 
-  static Future<Member?> fetchCurrentMember() async {
-    if (!SessionManager.isLoggedIn) return null;
+  static Future<Map<String, dynamic>> fetchCurrentMember() async {
+    if (!SessionManager.isLoggedIn) {
+      return {'statusCode': 401, 'success': false, 'message': 'Belum login'};
+    }
 
     try {
       final url = Uri.parse('${AppConfig.baseUrl}/member');
@@ -175,81 +218,152 @@ class AuthService {
         headers: SessionManager.getHeaders(),
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _currentUser = Member.fromJson(data['data']);
+      final data = jsonDecode(response.body);
 
+      if (response.statusCode == 200 && data['success'] == true) {
+        _currentUser = Member.fromJson(data['data']);
         await SessionManager.updateUserData(data['data']);
         _notifyAllAuthStateListeners();
-        return _currentUser;
+
+        return {
+          'statusCode': response.statusCode,
+          'success': true,
+          'data': data['data'],
+        };
       } else if (response.statusCode == 401) {
         await logout();
-        return null;
+        return {
+          'statusCode': 401,
+          'success': false,
+          'message': data['error'] ?? 'Sesi telah berakhir',
+        };
       } else {
-        print('Fetch current member failed: ${response.statusCode}');
-        return null;
+        return {
+          'statusCode': response.statusCode,
+          'success': false,
+          'message': data['error'] ?? 'Gagal mengambil data user',
+        };
       }
     } catch (e) {
       print('Fetch current member error: $e');
-      return null;
+      return {
+        'statusCode': 500,
+        'success': false,
+        'message': 'Terjadi kesalahan koneksi',
+      };
     }
   }
 
-  static Future<bool> updateProfile(
+  static Future<Map<String, dynamic>> updateProfile(
     String firstName,
     String lastName,
     String email, {
     String? password,
   }) async {
-    if (_currentUser == null) return false;
+    if (_currentUser == null) {
+      return {
+        'statusCode': 401,
+        'success': false,
+        'message': 'User belum login',
+      };
+    }
 
     try {
-      final url = Uri.parse('${AppConfig.baseUrl}/member');
-      final body = <String, dynamic>{
-        'first_name': firstName,
-        'surname': lastName,
-        'email': email,
-      };
-
       // Update password jika diberikan
       if (password != null && password.isNotEmpty) {
-        final passwordUrl = Uri.parse(
-          '${AppConfig.baseUrl}/member/password',
-        );
+        final passwordUrl = Uri.parse('${AppConfig.baseUrl}/member/password');
         final passwordResponse = await http.put(
           passwordUrl,
           headers: SessionManager.getHeaders(),
           body: jsonEncode({'new_password': password}),
         );
+
+        final passwordData = jsonDecode(passwordResponse.body);
+
         if (passwordResponse.statusCode != 200) {
-          print('Password update failed: ${passwordResponse.statusCode}');
-          return false;
+          return {
+            'statusCode': passwordResponse.statusCode,
+            'success': false,
+            'message': passwordData['error'] ?? 'Gagal mengubah password',
+          };
         }
       }
 
       // Update profile data
+      final url = Uri.parse('${AppConfig.baseUrl}/member');
       final response = await http.put(
         url,
         headers: SessionManager.getHeaders(),
-        body: jsonEncode(body),
+        body: jsonEncode({
+          'first_name': firstName,
+          'surname': lastName,
+          'email': email,
+        }),
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        _currentUser = Member.fromJson(data['data']);
+      final data = jsonDecode(response.body);
 
+      if (response.statusCode == 200 && data['success'] == true) {
+        _currentUser = Member.fromJson(data['data']);
         await SessionManager.updateUserData(data['data']);
         _notifyAllAuthStateListeners();
-        return true;
+
+        return {
+          'statusCode': response.statusCode,
+          'success': true,
+          'message': data['message'] ?? 'Profil berhasil diperbarui',
+          'data': data['data'],
+        };
+      } else {
+        return {
+          'statusCode': response.statusCode,
+          'success': false,
+          'message':
+              data['error'] ?? data['message'] ?? 'Gagal memperbarui profil',
+        };
       }
-      return false;
     } catch (e) {
       print('Update profile error: $e');
-      return false;
+      return {
+        'statusCode': 500,
+        'success': false,
+        'message': 'Terjadi kesalahan koneksi',
+      };
     }
   }
 
-  static Future<bool> logout() async {
+  static Future<Map<String, dynamic>> forgotPassword(String email) async {
+    try {
+      final url = Uri.parse('${AppConfig.baseUrl}/forgotpassword');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({'email': email}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      return {
+        'statusCode': response.statusCode,
+        'success': response.statusCode == 200 && data['success'] == true,
+        'message': data['success'] == true
+            ? (data['message'] ?? 'Link reset password telah dikirim')
+            : (data['error'] ?? data['message'] ?? 'Gagal mengirim link reset'),
+      };
+    } catch (e) {
+      print('Forgot password error: $e');
+      return {
+        'statusCode': 500,
+        'success': false,
+        'message': 'Terjadi kesalahan koneksi',
+      };
+    }
+  }
+
+  static Future<Map<String, dynamic>> logout() async {
     try {
       if (SessionManager.isLoggedIn) {
         final url = Uri.parse('${AppConfig.baseUrl}/logout');
@@ -264,7 +378,7 @@ class AuthService {
       await SessionManager.clearSession();
       _notifyAllAuthStateListeners();
     }
-    return true;
+    return {'statusCode': 200, 'success': true, 'message': 'Logout berhasil'};
   }
 
   static void _notifyAllAuthStateListeners() {
@@ -281,51 +395,5 @@ class AuthService {
 
   static void clearAuthStateListeners() {
     _authStateListeners.clear();
-  }
-
-  static Future<Map<String, dynamic>> forgotPassword(String email) async {
-    try {
-      final url = Uri.parse('${AppConfig.baseUrl}/forgotpassword');
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({'email': email}),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return {
-          'success': data['success'] ?? true,
-          'message':
-              data['message'] ??
-              'Link atur ulang kata sandi telah dikirim ke email Anda.',
-        };
-      } else {
-        try {
-          final data = jsonDecode(response.body);
-          return {
-            'success': false,
-            'message':
-                data['message'] ??
-                'Gagal mengirim email reset password. Silakan coba lagi.',
-          };
-        } catch (e) {
-          return {
-            'success': false,
-            'message':
-                'Gagal mengirim email reset password. Silakan coba lagi.',
-          };
-        }
-      }
-    } catch (e) {
-      print('Forgot password error: $e');
-      return {
-        'success': false,
-        'message': 'Terjadi kesalahan koneksi. Silakan coba lagi.',
-      };
-    }
   }
 }

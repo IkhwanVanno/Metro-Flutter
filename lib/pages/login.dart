@@ -24,21 +24,29 @@ class _LoginState extends State<Login> {
   }
 
   void _handleLogin() async {
-    final success = await authController.login(
+    final response = await authController.login(
       emailController.text.trim(),
       passwordController.text,
     );
 
     if (mounted) {
-      if (success) {
+      if (response['success'] == true) {
+        Get.snackbar(
+          'Berhasil',
+          response['message'] ?? 'Login berhasil',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 2),
+        );
         Get.offAllNamed(AppRoutes.mainPage);
       } else {
         Get.snackbar(
           'Login Gagal',
-          authController.errorMessage,
+          response['message'] ?? 'Terjadi kesalahan',
           backgroundColor: Colors.red,
           colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
       }
@@ -46,20 +54,26 @@ class _LoginState extends State<Login> {
   }
 
   void _handleGoogleLogin() async {
-    final success = await authController.loginWithGoogle();
+    final response = await authController.loginWithGoogle();
 
     if (mounted) {
-      if (success) {
+      if (response['success'] == true) {
+        Get.snackbar(
+          'Berhasil',
+          response['message'] ?? 'Login Google berhasil',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 2),
+        );
         Get.offAllNamed(AppRoutes.mainPage);
       } else {
         Get.snackbar(
-          'Google Login Gagal',
-          authController.errorMessage.isEmpty
-              ? 'Silakan coba lagi'
-              : authController.errorMessage,
+          'Login Gagal',
+          response['message'] ?? 'Terjadi kesalahan',
           backgroundColor: Colors.red,
           colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
       }
@@ -74,7 +88,10 @@ class _LoginState extends State<Login> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: Column(
         children: [
@@ -277,7 +294,7 @@ class _LoginState extends State<Login> {
                       children: [
                         const Text('New to logistics?'),
                         TextButton(
-                          onPressed: () => Get.offNamed(AppRoutes.register),
+                          onPressed: () => Get.toNamed(AppRoutes.register),
                           child: const Text(
                             'Register',
                             style: TextStyle(
