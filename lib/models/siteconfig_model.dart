@@ -11,6 +11,7 @@ class SiteConfig {
   final int companyPostalCode;
   final String credit;
   final String aboutTitle;
+  final String aboutDescription;
   final String subAboutDescription;
   final String subAbout1Title;
   final String subAbout1Description;
@@ -36,6 +37,7 @@ class SiteConfig {
     required this.companyPostalCode,
     required this.credit,
     required this.aboutTitle,
+    required this.aboutDescription,
     required this.subAboutDescription,
     required this.subAbout1Title,
     required this.subAbout1Description,
@@ -63,6 +65,7 @@ class SiteConfig {
       companyPostalCode: json['company_postal_code'] ?? 0,
       credit: json['credit'] ?? '',
       aboutTitle: json['about_title'] ?? '',
+      aboutDescription: json['about_description'] ?? '',
       subAboutDescription: json['sub_about_description'] ?? '',
       subAbout1Title: json['sub_about1_title'] ?? '',
       subAbout1Description: json['sub_about1_description'] ?? '',

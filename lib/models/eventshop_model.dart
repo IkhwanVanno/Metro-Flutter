@@ -26,7 +26,7 @@ class Eventshop {
       id: json['id'],
       name: json['name'] ?? '',
       description: json['description'] ?? '',
-      link: json['link'] ?? '',
+      link: json['link_url'] ?? '',
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
       image: json['image_url'] ?? '',
