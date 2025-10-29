@@ -12,6 +12,10 @@ class Group {
       code: json['Code'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {'ID': id, 'Title': title, 'Code': code};
+  }
 }
 
 class Member {
@@ -39,10 +43,26 @@ class Member {
       firstName: json['first_name'] ?? '',
       surname: json['surname'] ?? '',
       email: json['email'] ?? '',
-      tempIDHash: null,
-      tempIDExpired: null,
-      groups: [],
+      tempIDHash: json['temp_id_hash'],
+      tempIDExpired: json['temp_id_expired'] != null
+          ? DateTime.tryParse(json['temp_id_expired'])
+          : null,
+      groups: json['groups'] != null
+          ? (json['groups'] as List).map((g) => Group.fromJson(g)).toList()
+          : [],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'first_name': firstName,
+      'surname': surname,
+      'email': email,
+      'temp_id_hash': tempIDHash,
+      'temp_id_expired': tempIDExpired?.toIso8601String(),
+      'groups': groups.map((g) => g.toJson()).toList(),
+    };
   }
 
   String get fullName => '$firstName $surname';

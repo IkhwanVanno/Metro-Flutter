@@ -17,6 +17,7 @@ dependencies:
   firebase_auth: ^6.1.0 # firebase auth
   url_launcher: ^6.2.5 # Open URL
   google_sign_in: ^6.1.6 # Google Auth Sign-in
+  carousel_slider: ^5.1.1 # Carousel_image
 
 dev_dependencies:
   flutter_test:

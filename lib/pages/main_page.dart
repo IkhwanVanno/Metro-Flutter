@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
+import 'package:metro/pages/order.dart';
 import 'profile.dart';
 
 class MainPage extends StatefulWidget {
@@ -12,7 +13,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [const Home(), const ProfilePage()];
+  final List<Widget> _pages = [
+    const Home(),
+    const OrderPage(),
+    const ProfilePage(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,6 +39,10 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.article_outlined),
+            label: 'Order',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),

@@ -5,4 +5,7 @@ class AppRoutes {
   static const String forgetpassword = '/forgetpassword';
   static const String mainPage = '/mainPage';
   static const String profile = '/profile';
+  static const String orderpage = '/orderpage';
+  static const String cartpage = '/cartpage';
+  static const String favoritepage = '/favoritepage';
 }

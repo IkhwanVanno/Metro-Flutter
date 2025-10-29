@@ -1,3 +1,3 @@
 class AppConfig {
-  static const String baseUrl = 'https://fb728f1d9024.ngrok-free.app/MetroShoppingG/api';
+  static const String baseUrl = 'https://allen-wider-ecstatically.ngrok-free.dev/MetroShoppingG/api';
 }
