@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:metro/controller/product_controller.dart';
 import 'package:metro/controller/siteconfig_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../routes/app_routes.dart';
@@ -68,23 +69,34 @@ class _HomeState extends State<Home> {
                         ),
                 ),
                 Expanded(
-                  child: Container(
-                    height: 38,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        hintStyle: const TextStyle(fontSize: 14),
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(
+                        AppRoutes.searchresultpage,
+                      ); // arahkan ke halaman pencarian
+                    },
+                    child: Container(
+                      height: 38,
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.search, color: Colors.grey),
+                          SizedBox(width: 6),
+                          Text(
+                            'Cari produk...',
+                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
+
                 const SizedBox(width: 8),
                 IconButton(
                   icon: const Icon(
@@ -279,6 +291,299 @@ class _HomeState extends State<Home> {
                   ),
                 );
               }).toList(),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'Produk Terbaru',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[800],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Bagian Product Grid di Home Page
+            GetX<ProductController>(
+              init: ProductController(),
+              builder: (controller) {
+                if (controller.isLoading.value) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
+                if (controller.errorMessage.isNotEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            controller.errorMessage.value,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () => controller.fetchProducts(),
+                            child: const Text('Coba Lagi'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                if (controller.products.isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text('Tidak ada produk tersedia'),
+                    ),
+                  );
+                }
+
+                // Batasi jumlah produk yang ditampilkan di home (max 6)
+                final displayProducts = controller.products.take(6).toList();
+
+                return Column(
+                  children: [
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                            childAspectRatio: 0.65,
+                          ),
+                      itemCount: displayProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = displayProducts[index];
+                        return GestureDetector(
+                          onTap: () => Get.toNamed(
+                            AppRoutes.productdetailpage,
+                            arguments: product,
+                          ),
+                          child: Card(
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Product Image
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                              top: Radius.circular(12),
+                                            ),
+                                        child: Image.network(
+                                          product.imageUrl,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          loadingBuilder:
+                                              (context, child, progress) {
+                                                if (progress == null) {
+                                                  return child;
+                                                }
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              },
+                                          errorBuilder:
+                                              (context, error, stack) =>
+                                                  const Center(
+                                                    child: Icon(
+                                                      Icons.broken_image,
+                                                      size: 50,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                        ),
+                                      ),
+                                      // Discount Badge
+                                      if (product.hasDiscount)
+                                        Positioned(
+                                          top: 8,
+                                          left: 8,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              '-${product.discountPercentage.toStringAsFixed(2)}%',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      // Flash Sale Badge
+                                      if (product.hasFlashsale)
+                                        Positioned(
+                                          top: 8,
+                                          right: 8,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.orange,
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: const Text(
+                                              '⚡ FLASH',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                // Product Info
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Product Name
+                                      Text(
+                                        product.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      // Category & Rating
+                                      if (product.categoryName != null)
+                                        Text(
+                                          product.categoryName!,
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                      if (product.rating != null)
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              size: 12,
+                                              color: Colors.amber,
+                                            ),
+                                            const SizedBox(width: 2),
+                                            Text(
+                                              product.rating!.toStringAsFixed(
+                                                1,
+                                              ),
+                                              style: const TextStyle(
+                                                fontSize: 11,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      const SizedBox(height: 4),
+                                      // Price
+                                      if (product.hasDiscount) ...[
+                                        Text(
+                                          product.formattedOriginalPrice,
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey[600],
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
+                                        ),
+                                        Text(
+                                          product.formattedPrice,
+                                          style: const TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ] else
+                                        Text(
+                                          product.formattedPrice,
+                                          style: const TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      // Stock Info
+                                      Text(
+                                        'Stok: ${product.stock}',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: product.stock > 0
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    // Tombol Lihat Semua Produk
+                    if (controller.products.length > 6)
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: () =>
+                                Get.toNamed(AppRoutes.searchresultpage),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              side: const BorderSide(color: Colors.blue),
+                            ),
+                            child: const Text('Lihat Semua Produk'),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
           ],
         );

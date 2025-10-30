@@ -317,7 +317,7 @@ class ApiService {
     String? sort,
     int? rating,
     int page = 1,
-    int limit = 10,
+    int limit = 100,
   }) async {
     try {
       Map<String, String> queryParams = {
@@ -342,18 +342,50 @@ class ApiService {
         headers: SessionManager.getHeaders(),
       );
 
+      if (response.body.isEmpty) {
+        return {
+          'statusCode': response.statusCode,
+          'success': false,
+          'message': 'Response kosong dari server',
+        };
+      }
+
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        List<Product> products = (data['data'] as List)
-            .map((item) => Product.fromJson(item))
-            .toList();
+        // Validasi data adalah List
+        if (data['data'] is! List) {
+          print('Error: data is not a List, it is ${data['data'].runtimeType}');
+          return {
+            'statusCode': response.statusCode,
+            'success': false,
+            'message': 'Format data tidak valid',
+          };
+        }
+
+        List<Product> products = [];
+
+        // Parse setiap item dengan error handling
+        for (var item in data['data']) {
+          try {
+            if (item is Map<String, dynamic>) {
+              products.add(Product.fromJson(item));
+            } else {
+              print(
+                'Warning: Item bukan Map<String, dynamic>: ${item.runtimeType}',
+              );
+            }
+          } catch (e) {
+            print('Error parsing product item: $e');
+            print('Item: $item');
+          }
+        }
 
         return {
           'statusCode': response.statusCode,
           'success': true,
           'data': products,
-          'meta': data['meta'],
+          'meta': data['meta'] ?? {},
         };
       } else {
         return {
@@ -362,12 +394,13 @@ class ApiService {
           'message': data['error'] ?? 'Gagal mengambil produk',
         };
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Get products error: $e');
+      print('Stack trace: $stackTrace');
       return {
         'statusCode': 500,
         'success': false,
-        'message': 'Terjadi kesalahan koneksi',
+        'message': 'Terjadi kesalahan: ${e.toString()}',
       };
     }
   }

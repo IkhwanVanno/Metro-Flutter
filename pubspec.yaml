@@ -16,6 +16,7 @@ dependencies:
   firebase_core: ^4.1.1 # firebase core
   firebase_auth: ^6.1.0 # firebase auth
   url_launcher: ^6.2.5 # Open URL
+  infinite_scroll_pagination: ^4.0.0 #Paggination API
   google_sign_in: ^6.1.6 # Google Auth Sign-in
   carousel_slider: ^5.1.1 # Carousel_image
 
