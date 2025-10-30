@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:metro/models/eventshop_model.dart';
+import 'package:metro/models/flashsale_model.dart';
 import 'package:metro/models/popupad_model.dart';
 import 'package:metro/models/siteconfig_model.dart';
 import 'package:metro/models/carousel_model.dart';
@@ -10,6 +11,7 @@ class SiteconfigController extends GetxController {
   var carousels = <Carousel>[].obs;
   var eventShops = <Eventshop>[].obs;
   var popupAds = <Popupad>[].obs;
+  var flashSales = <Flashsale>[].obs;
   var hasShownPopup = false.obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -58,7 +60,17 @@ class SiteconfigController extends GetxController {
         popupAds.assignAll(popupResponse['data']);
       } else {
         errorMessage.value =
-            eventShopResponse['message'] ?? 'Gagal memuat Pop-Up';
+            popupResponse['message'] ?? 'Gagal memuat Pop-Up';
+            print('data');
+      }
+
+      // Fetch FlashSale
+      final flashsaleResponse = await ApiService.getFlashSales();
+      if (flashsaleResponse['success'] == true) {
+        flashSales.assignAll(flashsaleResponse['data']);
+      } else {
+        errorMessage.value =
+            flashsaleResponse['message'] ?? 'Gagal memuat Flash Sale';
             print('data');
       }
     } catch (e) {

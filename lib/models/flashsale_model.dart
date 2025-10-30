@@ -10,6 +10,7 @@ class Flashsale {
   final DateTime endTime;
   final int discountFlashSale;
   final FlashsaleStatus status;
+  final String imageUrl;
   final List<Product>? products;
 
   Flashsale({
@@ -20,6 +21,7 @@ class Flashsale {
     required this.endTime,
     required this.discountFlashSale,
     required this.status,
+    required this.imageUrl,
     this.products,
   });
 
@@ -34,6 +36,7 @@ class Flashsale {
       status: (json['status'] ?? 'inactive') == 'active'
           ? FlashsaleStatus.active
           : FlashsaleStatus.inactive,
+      imageUrl: json['image_url'] ?? '',
       products: json['products'] != null
           ? (json['products'] as List)
                 .map((item) => Product.fromJson(item))

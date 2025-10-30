@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:metro/controller/siteconfig_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../routes/app_routes.dart';
 
 class Home extends StatefulWidget {
@@ -112,6 +113,7 @@ class _HomeState extends State<Home> {
         final site = siteController.siteConfig.value;
         final carousels = siteController.carousels;
         final eventShop = siteController.eventShops;
+        final flashSale = siteController.flashSales;
 
         return ListView(
           padding: const EdgeInsets.all(8),
@@ -125,11 +127,50 @@ class _HomeState extends State<Home> {
                   viewportFraction: 0.9,
                 ),
                 items: carousels.map((item) {
-                  return ClipRRect(
-                    child: Image.network(
-                      item.imageUrl,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
+                  return Builder(
+                    builder: (BuildContext context) => ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: GestureDetector(
+                        onTap: () async {
+                          if (item.link.isNotEmpty) {
+                            try {
+                              final Uri url = Uri.parse(item.link);
+                              if (!await launchUrl(
+                                url,
+                                mode: LaunchMode.externalApplication,
+                              )) {
+                                Get.snackbar(
+                                  'Error',
+                                  'Tidak dapat membuka tautan',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              }
+                            } catch (e) {
+                              Get.snackbar(
+                                'Error',
+                                'Tautan tidak valid: ${item.link}',
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            }
+                          }
+                        },
+                        child: Image.network(
+                          item.imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Icon(Icons.broken_image),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   );
                 }).toList(),
@@ -180,6 +221,48 @@ class _HomeState extends State<Home> {
               ),
             ],
             const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'Flash Sale',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[800],
+                ),
+              ),
+            ),
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 80,
+                autoPlay: false,
+                enlargeCenterPage: true,
+                viewportFraction: 0.9,
+              ),
+              items: flashSale.map((item) {
+                return ClipRRect(
+                  child: Image.network(
+                    item.imageUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'Event Shop',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[800],
+                ),
+              ),
+            ),
             CarouselSlider(
               options: CarouselOptions(
                 height: 180,
@@ -241,7 +324,21 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.network(popup.image, fit: BoxFit.cover),
+                    GestureDetector(
+                      onTap: () async {
+                        if (popup.link.isNotEmpty) {
+                          await _openUrl(popup.link);
+                        }
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          popup.image,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     TextButton(
                       onPressed: () => Get.back(),
@@ -260,6 +357,42 @@ class _HomeState extends State<Home> {
           ),
         ),
         barrierDismissible: true,
+      );
+    }
+  }
+
+  Future<void> _openUrl(String url) async {
+    try {
+      final uri = Uri.tryParse(url);
+      if (uri == null) {
+        Get.snackbar(
+          'Error',
+          'URL tidak valid',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+        );
+        return;
+      }
+
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar(
+          'Error',
+          'Tidak dapat membuka tautan $url',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Terjadi kesalahan: $e',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
       );
     }
   }
