@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:metro/controller/auth_controller.dart';
+import 'package:metro/controller/favorite_controller.dart';
 import 'package:metro/models/product_model.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Product product;
+  final favoriteController = Get.put(FavoriteController());
+  final authController = Get.find<AuthController>();
 
-  const ProductDetailPage({super.key, required this.product});
+  ProductDetailPage({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -293,28 +297,41 @@ class ProductDetailPage extends StatelessWidget {
           children: [
             // Add To Favorite Button
             Expanded(
-              child: ElevatedButton.icon(
-                onPressed: product.stock > 0
-                    ? () {
-                        // TODO: Implement buy now
-                        Get.snackbar(
-                          'Favorite',
-                          'Fitur favorite akan segera hadir',
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
-                      }
-                    : null,
-                icon: const Icon(Icons.favorite),
-                label: const Text('Tambah ke Favorite'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              child: Obx(() {
+                return ElevatedButton.icon(
+                  onPressed: product.stock > 0
+                      ? () async {
+                          if (!authController.isLoggedIn) {
+                            Get.snackbar(
+                              'Autentikasi Diperlukan',
+                              'Silakan login terlebih dahulu',
+                            );
+                            return;
+                          }
+              
+                          await favoriteController.toggleFavorite(product.id);
+                        }
+                      : null,
+                  icon: Icon(
+                    favoriteController.isProductFavorited(product.id)
+                        ? Icons.favorite
+                        : Icons.favorite_border,
                   ),
-                ),
-              ),
+                  label: Text(
+                    favoriteController.isProductFavorited(product.id)
+                        ? 'Hapus dari Favorit'
+                        : 'Tambah ke Favorit',
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                );
+              }),
             ),
             const SizedBox(width: 12),
             // Add to Cart Button

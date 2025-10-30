@@ -10,4 +10,5 @@ class AppRoutes {
   static const String favoritepage = '/favoritepage';
   static const productdetailpage = '/productdetailpage';
   static const searchresultpage = '/searchresultpage';
+  static const checkout = '/checkout';
 }

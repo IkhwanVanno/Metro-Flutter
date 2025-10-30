@@ -25,17 +25,12 @@ class ProductController extends GetxController {
         limit: 100,
       );
 
-      print('Fetch products response: $response');
-
       if (response['success'] == true) {
         final productList = response['data'] as List<Product>;
         products.assignAll(productList);
         filteredProducts.assignAll(productList);
-
-        print('Products loaded: ${products.length} items'); 
       } else {
         errorMessage(response['message'] ?? 'Gagal mengambil produk');
-        print('Fetch products failed: ${response['message']}');
       }
     } catch (e, stackTrace) {
       errorMessage('Terjadi kesalahan: ${e.toString()}');

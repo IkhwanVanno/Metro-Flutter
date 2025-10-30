@@ -355,7 +355,6 @@ class ApiService {
       if (response.statusCode == 200 && data['success'] == true) {
         // Validasi data adalah List
         if (data['data'] is! List) {
-          print('Error: data is not a List, it is ${data['data'].runtimeType}');
           return {
             'statusCode': response.statusCode,
             'success': false,

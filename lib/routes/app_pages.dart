@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:metro/pages/cart.dart';
+import 'package:metro/pages/checkout.dart';
 import 'package:metro/pages/favorite.dart';
 import 'package:metro/pages/forgetpassword.dart';
 import 'package:metro/pages/login.dart';
@@ -22,11 +23,12 @@ class AppPages {
     GetPage(name: AppRoutes.profile, page: () => const ProfilePage()),
     GetPage(name: AppRoutes.orderpage, page: () => const OrderPage()),
     GetPage(name: AppRoutes.cartpage, page: () => const CartPage()),
-    GetPage(name: AppRoutes.favoritepage, page: () => const FavoritePage()),
+    GetPage(name: AppRoutes.favoritepage, page: () => FavoritePage()),
     GetPage(name: AppRoutes.searchresultpage, page: () => SearchResultPage()),
     GetPage(
       name: AppRoutes.productdetailpage,
       page: () => ProductDetailPage(product: Get.arguments),
     ),
+    GetPage(name: AppRoutes.checkout, page: () => const CheckoutPage()),
   ];
 }

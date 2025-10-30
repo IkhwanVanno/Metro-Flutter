@@ -31,19 +31,19 @@ class Product {
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
       stock: json['stock'] ?? 0,
-      priceAfterAllDiscount: _parseDouble(json['price_after_all_discount']),
-      originalPrice: _parseDouble(json['original_price']),
+      priceAfterAllDiscount: parseDouble(json['price_after_all_discount']),
+      originalPrice: parseDouble(json['original_price']),
       description: json['description'] ?? '',
       imageUrl: json['image_url'] ?? '',
       categoryName: json['category'] as String?,
-      rating: json['rating'] != null ? _parseDouble(json['rating']) : null,
+      rating: json['rating'] != null ? parseDouble(json['rating']) : null,
       hasFlashsale: json['has_flashsale'] ?? false,
       flashsaleName: json['flashsale_name'] as String?,
     );
   }
 
   // Helper method untuk parsing double
-  static double _parseDouble(dynamic value) {
+  static double parseDouble(dynamic value) {
     if (value == null) return 0.0;
     if (value is double) return value;
     if (value is int) return value.toDouble();
