@@ -20,7 +20,6 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   void initState() {
     super.initState();
-    // hanya fetch data jika user sudah login
     if (authController.isLoggedIn) {
       favoriteController.fetchFavorites();
     }
@@ -31,7 +30,7 @@ class _FavoritePageState extends State<FavoritePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Daftar Favorit',
+          'Favorit Saya',
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -41,12 +40,9 @@ class _FavoritePageState extends State<FavoritePage> {
       ),
       backgroundColor: Colors.white,
       body: Obx(() {
-        // jika belum login, tampilkan halaman login prompt seperti di ProfilePage
         if (!authController.isLoggedIn) {
           return _buildLoginPrompt();
         }
-
-        // jika login, tampilkan daftar favorit
         return _buildFavoriteList();
       }),
     );

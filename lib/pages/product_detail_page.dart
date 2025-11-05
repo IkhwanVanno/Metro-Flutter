@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/auth_controller.dart';
+import 'package:metro/controller/cart_controller.dart';
 import 'package:metro/controller/favorite_controller.dart';
 import 'package:metro/models/product_model.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Product product;
   final favoriteController = Get.put(FavoriteController());
+  final CartController cartController = Get.put(CartController());
   final authController = Get.find<AuthController>();
 
   ProductDetailPage({super.key, required this.product});
@@ -308,7 +310,7 @@ class ProductDetailPage extends StatelessWidget {
                             );
                             return;
                           }
-              
+
                           await favoriteController.toggleFavorite(product.id);
                         }
                       : null,
@@ -328,7 +330,7 @@ class ProductDetailPage extends StatelessWidget {
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
-                    ),
+                    ),  
                   ),
                 );
               }),
@@ -338,13 +340,8 @@ class ProductDetailPage extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: product.stock > 0
-                    ? () {
-                        // TODO: Implement add to cart
-                        Get.snackbar(
-                          'Keranjang',
-                          'Produk akan ditambahkan ke keranjang',
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
+                    ? () async {
+                        await cartController.addToCart(product.id, quantity: 1);
                       }
                     : null,
                 icon: const Icon(Icons.shopping_cart),
