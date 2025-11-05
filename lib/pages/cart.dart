@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/auth_controller.dart';
 import 'package:metro/controller/cart_controller.dart';
+import 'package:metro/pages/checkout.dart';
 import 'package:metro/pages/product_detail_page.dart';
 import 'package:metro/routes/app_routes.dart';
 
@@ -72,12 +73,9 @@ class _CartPageState extends State<CartPage> {
                 ),
               ),
               onPressed: () {
-                Get.snackbar(
-                  'Checkout',
-                  'Proses checkout sedang dikembangkan',
-                  snackPosition: SnackPosition.BOTTOM,
-                );
+                Get.to(() => const CheckoutPage());
               },
+
               child: const Text(
                 'Checkout',
                 style: TextStyle(

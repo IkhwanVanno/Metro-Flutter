@@ -832,12 +832,28 @@ class ApiService {
         headers: SessionManager.getHeaders(),
       );
 
+      if (response.body.isEmpty) {
+        return {
+          'statusCode': response.statusCode,
+          'success': false,
+          'message': 'Response kosong dari server',
+        };
+      }
+
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        List<ShippingAddress> addresses = (data['data'] as List)
-            .map((item) => ShippingAddress.fromJson(item))
-            .toList();
+        List<ShippingAddress> addresses = [];
+
+        if (data['data'] != null && data['data'] is List) {
+          for (var item in data['data']) {
+            try {
+              addresses.add(ShippingAddress.fromJson(item));
+            } catch (e) {
+              print('Error parsing address item: $e');
+            }
+          }
+        }
 
         return {
           'statusCode': response.statusCode,
@@ -862,7 +878,7 @@ class ApiService {
       return {
         'statusCode': 500,
         'success': false,
-        'message': 'Terjadi kesalahan koneksi',
+        'message': 'Terjadi kesalahan koneksi: ${e.toString()}',
       };
     }
   }
@@ -1129,6 +1145,7 @@ class ApiService {
   }) async {
     try {
       final url = Uri.parse('${AppConfig.baseUrl}/shipping/check-ongkir');
+
       final response = await http.post(
         url,
         headers: SessionManager.getHeaders(),
@@ -1139,9 +1156,25 @@ class ApiService {
         }),
       );
 
+      if (response.body.isEmpty) {
+        return {
+          'statusCode': response.statusCode,
+          'success': false,
+          'message': 'Response kosong dari server',
+        };
+      }
+
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
+        if (data['data'] == null) {
+          return {
+            'statusCode': response.statusCode,
+            'success': false,
+            'message': 'Data ongkir kosong',
+          };
+        }
+
         return {
           'statusCode': response.statusCode,
           'success': true,
@@ -1151,7 +1184,8 @@ class ApiService {
         return {
           'statusCode': response.statusCode,
           'success': false,
-          'message': data['error'] ?? 'Gagal mengecek ongkir',
+          'message':
+              data['error'] ?? data['message'] ?? 'Gagal mengecek ongkir',
         };
       }
     } catch (e) {
@@ -1159,7 +1193,7 @@ class ApiService {
       return {
         'statusCode': 500,
         'success': false,
-        'message': 'Terjadi kesalahan koneksi',
+        'message': 'Terjadi kesalahan koneksi: ${e.toString()}',
       };
     }
   }

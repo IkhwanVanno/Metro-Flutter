@@ -1,60 +1,54 @@
-import 'package:metro/models/member_model.dart';
-import 'package:metro/models/order_model.dart';
-
 class ShippingAddress {
   final int id;
   final String receiverName;
-  final int phoneNumber;
+  final String phoneNumber;
   final String address;
+  final String provinceId;
   final String provinceName;
-  final int provinceId;
+  final String cityId;
   final String cityName;
-  final int cityId;
+  final String districtId;
   final String districtName;
-  final int districtId;
   final String postalCode;
   final bool isDefault;
-  final Member? member;
-  final List<Order>? orders;
 
   ShippingAddress({
     required this.id,
     required this.receiverName,
     required this.phoneNumber,
     required this.address,
-    required this.provinceName,
     required this.provinceId,
-    required this.cityName,
+    required this.provinceName,
     required this.cityId,
-    required this.districtName,
+    required this.cityName,
     required this.districtId,
+    required this.districtName,
     required this.postalCode,
     required this.isDefault,
-    this.member,
-    this.orders,
   });
 
   factory ShippingAddress.fromJson(Map<String, dynamic> json) {
     return ShippingAddress(
-      id: json['id'],
-      receiverName: json['receiver_name'] ?? '',
-      phoneNumber: json['phone_number'] ?? 0,
-      address: json['address'] ?? '',
-      provinceName: json['province_name'] ?? '',
-      provinceId: json['province_id'] ?? 0,
-      cityName: json['city_name'] ?? '',
-      cityId: json['city_id'] ?? 0,
-      districtName: json['district_name'] ?? '',
-      districtId: json['district_id'] ?? 0,
-      postalCode: json['postal_code'] ?? '',
-      isDefault: json['is_default'] ?? false,
-      member: json['member'] != null ? Member.fromJson(json['member']) : null,
-      orders: json['orders'] != null
-          ? (json['orders'] as List)
-                .map((item) => Order.fromJson(item))
-                .toList()
-          : null,
+      id: _parseInt(json['id']),
+      receiverName: json['receiver_name']?.toString() ?? '',
+      phoneNumber: json['phone_number']?.toString() ?? '',
+      address: json['address']?.toString() ?? '',
+      provinceId: json['province_id']?.toString() ?? '',
+      provinceName: json['province_name']?.toString() ?? '',
+      cityId: json['city_id']?.toString() ?? '',
+      cityName: json['city_name']?.toString() ?? '',
+      districtId: json['district_id']?.toString() ?? '',
+      districtName: json['district_name']?.toString() ?? '',
+      postalCode: json['postal_code']?.toString() ?? '',
+      isDefault: json['is_default'] == true || json['is_default'] == 1,
     );
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -63,16 +57,46 @@ class ShippingAddress {
       'receiver_name': receiverName,
       'phone_number': phoneNumber,
       'address': address,
-      'province_name': provinceName,
       'province_id': provinceId,
-      'city_name': cityName,
+      'province_name': provinceName,
       'city_id': cityId,
-      'district_name': districtName,
+      'city_name': cityName,
       'district_id': districtId,
+      'district_name': districtName,
       'postal_code': postalCode,
       'is_default': isDefault,
-      'member': member?.toJson(),
-      'orders': orders?.map((order) => order.toJson()).toList(),
     };
+  }
+  String get fullAddress =>
+      '$address, $districtName, $cityName, $provinceName $postalCode';
+      
+  ShippingAddress copyWith({
+    int? id,
+    String? receiverName,
+    String? phoneNumber,
+    String? address,
+    String? provinceId,
+    String? provinceName,
+    String? cityId,
+    String? cityName,
+    String? districtId,
+    String? districtName,
+    String? postalCode,
+    bool? isDefault,
+  }) {
+    return ShippingAddress(
+      id: id ?? this.id,
+      receiverName: receiverName ?? this.receiverName,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      provinceId: provinceId ?? this.provinceId,
+      provinceName: provinceName ?? this.provinceName,
+      cityId: cityId ?? this.cityId,
+      cityName: cityName ?? this.cityName,
+      districtId: districtId ?? this.districtId,
+      districtName: districtName ?? this.districtName,
+      postalCode: postalCode ?? this.postalCode,
+      isDefault: isDefault ?? this.isDefault,
+    );
   }
 }
