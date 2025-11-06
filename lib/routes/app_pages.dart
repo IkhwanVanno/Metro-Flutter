@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:metro/pages/cart.dart';
 import 'package:metro/pages/checkout.dart';
+import 'package:metro/pages/eventshop_detail_page.dart';
 import 'package:metro/pages/favorite.dart';
+import 'package:metro/pages/flashsale_detail_page.dart';
 import 'package:metro/pages/forgetpassword.dart';
 import 'package:metro/pages/login.dart';
 import 'package:metro/pages/main_page.dart';
@@ -30,5 +32,13 @@ class AppPages {
       page: () => ProductDetailPage(product: Get.arguments),
     ),
     GetPage(name: AppRoutes.checkout, page: () => const CheckoutPage()),
+    GetPage(
+      name: AppRoutes.flashsaledetailpage,
+      page: () => const FlashsaleDetailPage(),
+    ),
+    GetPage(
+      name: AppRoutes.eventshopdetailpage,
+      page: () => const EventshopDetailPage(),
+    ),
   ];
 }

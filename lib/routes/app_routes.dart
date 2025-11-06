@@ -11,4 +11,6 @@ class AppRoutes {
   static const productdetailpage = '/productdetailpage';
   static const searchresultpage = '/searchresultpage';
   static const checkout = '/checkout';
+  static const String flashsaledetailpage = '/flashsale-detail';
+  static const String eventshopdetailpage = '/eventshop-detail';
 }
