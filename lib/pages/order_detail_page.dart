@@ -44,10 +44,74 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       ),
     ).then((result) {
       if (result == true) {
-        // Reload order detail after review submitted
         _loadOrderDetail();
       }
     });
+  }
+
+  void _showInvoiceOptions() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Invoice Options',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.download, color: Colors.blue.shade700),
+              ),
+              title: const Text('Download Invoice'),
+              subtitle: const Text('Simpan invoice sebagai PDF'),
+              onTap: () {
+                Navigator.pop(context);
+                controller.downloadInvoice(widget.orderId);
+              },
+            ),
+            const SizedBox(height: 10),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.email, color: Colors.green.shade700),
+              ),
+              title: const Text('Kirim ke Email'),
+              subtitle: const Text('Invoice akan dikirim ke email Anda'),
+              onTap: () {
+                Navigator.pop(context);
+                controller.sendInvoiceToEmail(widget.orderId);
+              },
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -61,6 +125,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         backgroundColor: Colors.white,
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          // Invoice Button
+          if (orderDetail != null && orderDetail!.paymentStatus == 'paid')
+            IconButton(
+              icon: const Icon(Icons.receipt_long),
+              onPressed: _showInvoiceOptions,
+              tooltip: 'Invoice',
+            ),
+        ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -82,12 +155,81 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     _buildOrderItems(),
                     const SizedBox(height: 24),
                     _buildPaymentSummary(),
+
+                    // Invoice Card (untuk pesanan yang sudah dibayar)
+                    if (orderDetail!.paymentStatus == 'paid') ...[
+                      const SizedBox(height: 24),
+                      _buildInvoiceCard(),
+                    ],
+
                     const SizedBox(height: 80),
                   ],
                 ),
               ),
             ),
       bottomNavigationBar: _buildBottomBar(),
+    );
+  }
+
+  Widget _buildInvoiceCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.receipt_long, color: Colors.blue.shade700),
+                const SizedBox(width: 8),
+                const Text(
+                  'Invoice',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => controller.downloadInvoice(widget.orderId),
+                    icon: const Icon(Icons.download, size: 18),
+                    label: const Text('Download'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.blue,
+                      side: const BorderSide(color: Colors.blue),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () =>
+                        controller.sendInvoiceToEmail(widget.orderId),
+                    icon: const Icon(Icons.email, size: 18),
+                    label: const Text('Kirim Email'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -271,7 +413,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     ),
                   ],
                 ),
-                // Review Button
                 if (item.canBeReviewed && !item.hasReview) ...[
                   const SizedBox(height: 8),
                   SizedBox(

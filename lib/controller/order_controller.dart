@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/models/order_detail_model.dart';
 import 'package:metro/services/api_service.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class OrderController extends GetxController {
   var orders = <OrderSummary>[].obs;
@@ -100,7 +104,7 @@ class OrderController extends GetxController {
 
       final response = await ApiService.cancelOrder(orderId);
 
-      Get.back(); // Close loading dialog
+      Get.back();
 
       if (response['success'] == true) {
         Get.snackbar(
@@ -195,10 +199,7 @@ class OrderController extends GetxController {
           final url = Uri.parse(paymentUrl);
 
           if (await canLaunchUrl(url)) {
-            await launchUrl(
-              url,
-              mode: LaunchMode.externalApplication,
-            );
+            await launchUrl(url, mode: LaunchMode.externalApplication);
           } else {
             Get.snackbar(
               'Error',
@@ -234,6 +235,150 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal memproses pembayaran',
+        backgroundColor: Colors.red.shade600,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+    }
+  }
+
+  Future<void> downloadInvoice(int orderId) async {
+    try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+      final response = await ApiService.downloadInvoice(orderId);
+
+      Get.back();
+
+      if (response['success'] == true) {
+        final pdfBase64 = response['data']['pdf_base64'];
+        final fileName = response['data']['file_name'];
+        final pdfBytes = base64Decode(pdfBase64);
+
+        final savedPath = await _savePdfFile(pdfBytes, fileName);
+
+        if (savedPath != null) {
+          Get.snackbar(
+            'Berhasil',
+            'Invoice berhasil diunduh ke folder Download',
+            backgroundColor: Colors.green.shade600,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            duration: const Duration(seconds: 4),
+          );
+        }
+        return;
+      }
+
+      Get.snackbar(
+        'Gagal',
+        response['message'] ?? 'Gagal mengunduh invoice',
+        backgroundColor: Colors.red.shade600,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+    } catch (e) {
+      Get.back();
+      print('Error downloading invoice: $e');
+      Get.snackbar(
+        'Error',
+        'Gagal mengunduh invoice: ${e.toString()}',
+        backgroundColor: Colors.red.shade600,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+    }
+  }
+
+  Future<String?> _savePdfFile(List<int> bytes, String fileName) async {
+    try {
+      Directory? directory;
+
+      if (Platform.isAndroid) {
+        if (await _requestStoragePermission()) {
+          directory = await getExternalStorageDirectory();
+          final downloadPath = '/storage/emulated/0/Download';
+          directory = Directory(downloadPath);
+
+          if (!await directory.exists()) {
+            await directory.create(recursive: true);
+          }
+        } else {
+          Get.snackbar(
+            'Permission Denied',
+            'Izin penyimpanan diperlukan untuk menyimpan file',
+            backgroundColor: Colors.orange.shade600,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+          );
+          return null;
+        }
+      } else if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      }
+
+      if (directory != null) {
+        final filePath = '${directory.path}/$fileName';
+        final file = File(filePath);
+        await file.writeAsBytes(bytes);
+        return filePath;
+      }
+      return null;
+    } catch (e) {
+      print('Error saving PDF file: $e');
+      return null;
+    }
+  }
+
+  Future<bool> _requestStoragePermission() async {
+    if (Platform.isAndroid) {
+      if (await Permission.storage.isDenied) {
+        final status = await Permission.manageExternalStorage.request();
+        return status.isGranted;
+      }
+      return true;
+    }
+    return true;
+  }
+
+  Future<void> sendInvoiceToEmail(int orderId) async {
+    try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      final response = await ApiService.sendInvoice(orderId);
+
+      Get.back();
+
+      if (response['success'] == true) {
+        Get.snackbar(
+          'Berhasil',
+          response['message'] ?? 'Invoice berhasil dikirim ke email Anda',
+          backgroundColor: Colors.green.shade600,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          duration: const Duration(seconds: 4),
+        );
+        return;
+      }
+
+      Get.snackbar(
+        'Gagal',
+        response['message'] ?? 'Gagal mengirim invoice ke email',
+        backgroundColor: Colors.red.shade600,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+      );
+    } catch (e) {
+      Get.back();
+      print('Error sending invoice to email: $e');
+      Get.snackbar(
+        'Error',
+        'Gagal mengirim invoice ke email',
         backgroundColor: Colors.red.shade600,
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,

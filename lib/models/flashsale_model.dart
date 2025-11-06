@@ -1,9 +1,7 @@
 import 'dart:ui';
-
 import 'package:metro/models/product_model.dart';
 
 enum FlashsaleStatus { active, inactive }
-
 enum TimerStatus { upcoming, ongoing, expired }
 
 class Flashsale {

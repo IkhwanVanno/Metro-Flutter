@@ -20,6 +20,8 @@ dependencies:
   google_sign_in: ^6.1.6 # Google Auth Sign-in
   carousel_slider: ^5.1.1 # Carousel_image
   group_button: ^5.3.4 # Aneka Button
+  path_provider: ^2.1.5 # Path Provider
+  permission_handler: ^12.0.1 # Permission Handler
 
 dev_dependencies:
   flutter_test:

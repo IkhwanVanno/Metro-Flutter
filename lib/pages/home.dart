@@ -166,14 +166,14 @@ class _HomeState extends State<Home> {
                                 Get.snackbar(
                                   'Error',
                                   'Tidak dapat membuka tautan',
-                                  snackPosition: SnackPosition.BOTTOM,
+                                  snackPosition: SnackPosition.TOP,
                                 );
                               }
                             } catch (e) {
                               Get.snackbar(
                                 'Error',
                                 'Tautan tidak valid: ${item.link}',
-                                snackPosition: SnackPosition.BOTTOM,
+                                snackPosition: SnackPosition.TOP,
                               );
                             }
                           }

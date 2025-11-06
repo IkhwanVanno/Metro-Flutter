@@ -232,7 +232,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                                 Get.snackbar(
                                   'Info',
                                   'Link: ${eventshop!.link}',
-                                  snackPosition: SnackPosition.BOTTOM,
+                                  snackPosition: SnackPosition.TOP,
                                 );
                               },
                               icon: const Icon(Icons.link),
