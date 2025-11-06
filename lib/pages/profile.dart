@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/auth_controller.dart';
+import 'package:metro/services/api_service.dart';
+import 'package:metro/widgets/membership_card.dart';
 import '../routes/app_routes.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -19,10 +21,18 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isEditing = false;
   final authController = Get.find<AuthController>();
 
+  // Membership data
+  Map<String, dynamic>? membershipInfo;
+  Map<String, dynamic>? membershipProgress;
+  bool isLoadingMembership = false;
+
   @override
   void initState() {
     super.initState();
     _initializeControllers();
+    if (authController.isLoggedIn) {
+      _loadMembershipData();
+    }
   }
 
   void _initializeControllers() {
@@ -31,6 +41,32 @@ class _ProfilePageState extends State<ProfilePage> {
     surnameController = TextEditingController(text: user?.surname ?? '');
     emailController = TextEditingController(text: user?.email ?? '');
     passwordController = TextEditingController();
+  }
+
+  Future<void> _loadMembershipData() async {
+    setState(() => isLoadingMembership = true);
+
+    try {
+      final infoResponse = await ApiService.getMembershipInfo();
+      final progressResponse = await ApiService.getMembershipProgress();
+
+      if (mounted) {
+        setState(() {
+          if (infoResponse['success'] == true) {
+            membershipInfo = infoResponse['data'];
+          }
+          if (progressResponse['success'] == true) {
+            membershipProgress = progressResponse['data'];
+          }
+          isLoadingMembership = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading membership: $e');
+      if (mounted) {
+        setState(() => isLoadingMembership = false);
+      }
+    }
   }
 
   @override
@@ -98,7 +134,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 snackPosition: SnackPosition.TOP,
                 duration: const Duration(seconds: 2),
               );
-              // Tetap di MainPage, tapi akan menampilkan prompt login
             },
             child: const Text('Logout', style: TextStyle(color: Colors.red)),
           ),
@@ -123,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.only(right: 8),
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    minimumSize: const Size(60, 40), // tinggi proporsional
+                    minimumSize: const Size(60, 40),
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                   ),
                   onPressed: () {
@@ -150,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
           }),
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       body: Obx(() {
         if (!authController.isLoggedIn) {
           return _buildLoginPrompt();
@@ -205,9 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                onPressed: () {
-                  Get.toNamed(AppRoutes.login);
-                },
+                onPressed: () => Get.toNamed(AppRoutes.login),
                 child: const Text(
                   'Login Now',
                   style: TextStyle(
@@ -227,9 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(color: Colors.grey),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.register);
-                  },
+                  onPressed: () => Get.toNamed(AppRoutes.register),
                   child: const Text(
                     'Register',
                     style: TextStyle(
@@ -248,184 +279,260 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildProfileContent() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          const SizedBox(height: 16),
-          const CircleAvatar(
-            radius: 40,
-            backgroundColor: Colors.blue,
-            child: Icon(Icons.person, size: 50, color: Colors.white),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            authController.currentUser?.fullName ?? 'User',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            controller: firstnameController,
-            enabled: isEditing,
-            decoration: InputDecoration(
-              labelText: 'First Name',
-              prefixIcon: const Icon(Icons.person_outline),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.blue, width: 2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: surnameController,
-            enabled: isEditing,
-            decoration: InputDecoration(
-              labelText: 'Surname',
-              prefixIcon: const Icon(Icons.person_outline),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.blue, width: 2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: emailController,
-            enabled: isEditing,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              labelText: 'Email',
-              prefixIcon: const Icon(Icons.email_outlined),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.blue, width: 2),
-              ),
-            ),
-          ),
-          if (isEditing) ...[
-            const SizedBox(height: 16),
-            TextField(
-              controller: passwordController,
-              obscureText: obscurePassword,
-              decoration: InputDecoration(
-                labelText: 'New Password (Optional)',
-                prefixIcon: const Icon(Icons.lock_outline),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    obscurePassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      obscurePassword = !obscurePassword;
-                    });
-                  },
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: Colors.grey),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: Colors.blue, width: 2),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Leave password empty to keep current password',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-          const SizedBox(height: 24),
-          if (isEditing)
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: authController.isLoading
-                      ? Colors.grey
-                      : Colors.blue,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: authController.isLoading ? null : _handleSaveProfile,
-                child: authController.isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
-                          ),
-                        ),
-                      )
-                    : const Text(
-                        'Save Changes',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-              ),
-            )
-          else
-            const SizedBox(height: 8),
-          const SizedBox(height: 16),
-          SizedBox(
+          // Profile Header
+          Container(
             width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.blue,
+                  child: Icon(Icons.person, size: 50, color: Colors.white),
                 ),
-              ),
-              onPressed: _handleLogout,
-              child: const Text(
-                'Logout',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
+                const SizedBox(height: 12),
+                Text(
+                  authController.currentUser?.fullName ?? 'User',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  authController.currentUser?.email ?? '',
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                ),
+              ],
             ),
           ),
+
+          // Membership Card
+          if (isLoadingMembership)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: const Center(child: CircularProgressIndicator()),
+            )
+          else if (membershipInfo != null)
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: MembershipCard(
+                  tierName: membershipInfo!['tier_name'] ?? 'Bronze',
+                  tierImage: membershipInfo!['tier_image'] ?? '',
+                  totalTransactions: membershipInfo!['total_transactions'] ?? 0,
+                  formattedTotal: membershipInfo!['formatted_total'] ?? 'Rp 0',
+                  nextTierLimit: membershipProgress?['next_tier_limit'],
+                  remaining: membershipProgress?['remaining'],
+                  progressPercentage: double.tryParse(
+                    membershipProgress?['progress_percentage']?.replaceAll(
+                          '%',
+                          '',
+                        ) ??
+                        '0',
+                  ),
+                ),
+              ),
+            ),
+
+          // Profile Form
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Informasi Profil',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: firstnameController,
+                  enabled: isEditing,
+                  decoration: InputDecoration(
+                    labelText: 'First Name',
+                    prefixIcon: const Icon(Icons.person_outline),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: surnameController,
+                  enabled: isEditing,
+                  decoration: InputDecoration(
+                    labelText: 'Surname',
+                    prefixIcon: const Icon(Icons.person_outline),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: emailController,
+                  enabled: isEditing,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: const Icon(Icons.email_outlined),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                if (isEditing) ...[
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: obscurePassword,
+                    decoration: InputDecoration(
+                      labelText: 'New Password (Optional)',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscurePassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.blue,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Leave password empty to keep current password',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
+                const SizedBox(height: 24),
+                if (isEditing)
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: authController.isLoading
+                            ? Colors.grey
+                            : Colors.blue,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: authController.isLoading
+                          ? null
+                          : _handleSaveProfile,
+                      child: authController.isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : const Text(
+                              'Save Changes',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: _handleLogout,
+                    child: const Text(
+                      'Logout',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );

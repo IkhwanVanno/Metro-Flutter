@@ -8,7 +8,7 @@ class SearchResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProductController(), permanent: false);
+    final controller = Get.put(ProductController(), permanent: true);
     final searchController = TextEditingController();
     searchController.text = controller.searchQuery.value;
 
