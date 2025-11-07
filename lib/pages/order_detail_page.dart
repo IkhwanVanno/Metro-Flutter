@@ -43,7 +43,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         productName: item.productName,
         productImage: item.imageUrl,
       ),
-      barrierDismissible: false,
     ).then((result) {
       if (result == true) {
         Future.delayed(const Duration(milliseconds: 300), _loadOrderDetail);
