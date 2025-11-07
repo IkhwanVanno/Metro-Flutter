@@ -86,10 +86,7 @@ class AddressBottomSheet extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           'Tambahkan alamat pengiriman Anda',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.grey,
-                          ),
+                          style: TextStyle(fontSize: 14, color: AppColors.grey),
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton.icon(
@@ -134,13 +131,13 @@ class AddressBottomSheet extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: isSelected
-                              ? AppColors.blue
-                              : AppColors.grey,
+                          color: isSelected ? AppColors.blue : AppColors.grey,
                           width: isSelected ? 2 : 1,
                         ),
                         borderRadius: BorderRadius.circular(12),
-                        color: isSelected ? AppColors.blue.withAlpha(30) : AppColors.white,
+                        color: isSelected
+                            ? AppColors.blue.withAlpha(30)
+                            : AppColors.white,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +184,7 @@ class AddressBottomSheet extends StatelessWidget {
                                     vertical: 4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.green,
+                                    color: AppColors.green.withAlpha(30),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
@@ -512,6 +509,21 @@ class AddressBottomSheet extends StatelessWidget {
                                 await controller.addAddress(data);
                               }
                               Get.back();
+                              if (Get.isBottomSheetOpen ?? false) {
+                                Get.back();
+                              }
+                              Future.delayed(
+                                const Duration(milliseconds: 300),
+                                () {
+                                  Get.bottomSheet(
+                                    AddressBottomSheet(controller: controller),
+                                    isScrollControlled: true,
+                                    backgroundColor: AppColors.transparent,
+                                    enableDrag: true,
+                                    isDismissible: true,
+                                  );
+                                },
+                              );
                             }
                           },
 

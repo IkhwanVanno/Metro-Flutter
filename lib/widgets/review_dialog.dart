@@ -27,12 +27,6 @@ class _ReviewDialogState extends State<ReviewDialog> {
   int rating = 5;
   bool showName = true;
 
-  @override
-  void dispose() {
-    messageController.dispose();
-    super.dispose();
-  }
-
   void _submitReview() async {
     if (messageController.text.trim().length < 5) {
       Get.snackbar(
@@ -53,8 +47,13 @@ class _ReviewDialogState extends State<ReviewDialog> {
       showName: showName,
     );
 
+    if (!mounted) return;
     if (success) {
-      Get.back(result: true);
+      if (Get.isDialogOpen ?? false) {
+        Get.back(result: true);
+      } else {
+        Navigator.of(context).pop(true);
+      }
     }
   }
 
@@ -157,10 +156,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                     ),
                     Text(
                       _getRatingText(rating),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.grey,
-                      ),
+                      style: TextStyle(fontSize: 14, color: AppColors.grey),
                     ),
                   ],
                 ),
