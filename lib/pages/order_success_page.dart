@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/pages/order_detail_page.dart';
 import 'package:metro/routes/app_routes.dart';
+import 'package:metro/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OrderSuccessPage extends StatelessWidget {
@@ -30,13 +31,13 @@ class OrderSuccessPage extends StatelessWidget {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: Colors.green.shade100,
+                  color: AppColors.green.withAlpha(30),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.check_circle,
                   size: 80,
-                  color: Colors.green,
+                  color: AppColors.green,
                 ),
               ),
               const SizedBox(height: 32),
@@ -56,7 +57,7 @@ class OrderSuccessPage extends StatelessWidget {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: AppColors.grey.withAlpha(30),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -73,7 +74,7 @@ class OrderSuccessPage extends StatelessWidget {
               // Information Text
               Text(
                 'Silakan selesaikan pembayaran untuk memproses pesanan Anda',
-                style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                style: TextStyle(fontSize: 16, color: AppColors.grey),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
@@ -95,14 +96,14 @@ class OrderSuccessPage extends StatelessWidget {
                         Get.snackbar(
                           'Error',
                           'Tidak dapat membuka halaman pembayaran',
-                          backgroundColor: Colors.red,
-                          colorText: Colors.white,
+                          backgroundColor: AppColors.red,
+                          colorText: AppColors.white,
                         );
                       }
                     },
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -112,7 +113,7 @@ class OrderSuccessPage extends StatelessWidget {
                       'Bayar Sekarang',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -144,7 +145,7 @@ class OrderSuccessPage extends StatelessWidget {
               // Back to Home Button
               TextButton(
                 onPressed: () {
-                  Get.offAllNamed(AppRoutes.home);
+                  Get.offAllNamed(AppRoutes.mainPage);
                 },
                 child: const Text(
                   'Kembali ke Beranda',

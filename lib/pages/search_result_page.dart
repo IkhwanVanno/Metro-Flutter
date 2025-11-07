@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/product_controller.dart';
 import 'package:metro/pages/product_detail_page.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class SearchResultPage extends StatelessWidget {
   const SearchResultPage({super.key});
@@ -14,12 +15,8 @@ class SearchResultPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.accent,
         elevation: 1,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
         title: TextField(
           controller: searchController,
           autofocus: false,
@@ -42,7 +39,7 @@ class SearchResultPage extends StatelessWidget {
         ),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.sort, color: Colors.black),
+            icon: const Icon(Icons.sort, color: AppColors.black),
             onSelected: controller.sortProducts,
             itemBuilder: (context) => [
               const PopupMenuItem(value: 'Terbaru', child: Text('Terbaru')),
@@ -74,12 +71,12 @@ class SearchResultPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.error_outline, size: 60, color: Colors.red[300]),
+                Icon(Icons.error_outline, size: 60, color: AppColors.red),
                 const SizedBox(height: 16),
                 Text(
                   controller.errorMessage.value,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.red),
+                  style: const TextStyle(color: AppColors.red),
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
@@ -98,14 +95,14 @@ class SearchResultPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
+                Icon(Icons.search_off, size: 80, color: AppColors.grey),
                 const SizedBox(height: 16),
                 Text(
                   controller.searchQuery.value.isNotEmpty
                       ? 'Tidak ada produk dengan kata kunci "${controller.searchQuery.value}"'
                       : 'Tidak ada produk ditemukan',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 16, color: AppColors.grey),
                 ),
               ],
             ),
@@ -117,7 +114,7 @@ class SearchResultPage extends StatelessWidget {
             // Search Info & Sort Info
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              color: Colors.grey[100],
+              color: AppColors.grey,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -128,7 +125,7 @@ class SearchResultPage extends StatelessWidget {
                   Obx(
                     () => Text(
                       'Urut: ${controller.sortOption.value}',
-                      style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: 13, color: AppColors.black),
                     ),
                   ),
                 ],
@@ -185,7 +182,7 @@ class SearchResultPage extends StatelessWidget {
                                             child: Icon(
                                               Icons.broken_image,
                                               size: 50,
-                                              color: Colors.grey,
+                                              color: AppColors.grey,
                                             ),
                                           ),
                                     ),
@@ -201,7 +198,7 @@ class SearchResultPage extends StatelessWidget {
                                           vertical: 2,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: Colors.red,
+                                          color: AppColors.red,
                                           borderRadius: BorderRadius.circular(
                                             4,
                                           ),
@@ -209,7 +206,7 @@ class SearchResultPage extends StatelessWidget {
                                         child: Text(
                                           '-${product.discountPercentage.toStringAsFixed(2)}%',
                                           style: const TextStyle(
-                                            color: Colors.white,
+                                            color: AppColors.white,
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -227,7 +224,7 @@ class SearchResultPage extends StatelessWidget {
                                           vertical: 2,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: Colors.orange,
+                                          color: AppColors.orange,
                                           borderRadius: BorderRadius.circular(
                                             4,
                                           ),
@@ -235,7 +232,7 @@ class SearchResultPage extends StatelessWidget {
                                         child: const Text(
                                           '⚡ FLASH',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: AppColors.white,
                                             fontSize: 9,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -266,7 +263,7 @@ class SearchResultPage extends StatelessWidget {
                                       product.categoryName!,
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: Colors.grey[600],
+                                        color: AppColors.grey,
                                       ),
                                     ),
                                   if (product.rating != null)
@@ -275,7 +272,7 @@ class SearchResultPage extends StatelessWidget {
                                         const Icon(
                                           Icons.star,
                                           size: 12,
-                                          color: Colors.amber,
+                                          color: AppColors.yellow,
                                         ),
                                         const SizedBox(width: 2),
                                         Text(
@@ -290,14 +287,14 @@ class SearchResultPage extends StatelessWidget {
                                       product.formattedOriginalPrice,
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: Colors.grey[600],
+                                        color: AppColors.grey,
                                         decoration: TextDecoration.lineThrough,
                                       ),
                                     ),
                                     Text(
                                       product.formattedPrice,
                                       style: const TextStyle(
-                                        color: Colors.redAccent,
+                                        color: AppColors.red,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -306,7 +303,7 @@ class SearchResultPage extends StatelessWidget {
                                     Text(
                                       product.formattedPrice,
                                       style: const TextStyle(
-                                        color: Colors.redAccent,
+                                        color: AppColors.red,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -316,8 +313,8 @@ class SearchResultPage extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 10,
                                       color: product.stock > 0
-                                          ? Colors.green
-                                          : Colors.red,
+                                          ? AppColors.green
+                                          : AppColors.red,
                                     ),
                                   ),
                                 ],

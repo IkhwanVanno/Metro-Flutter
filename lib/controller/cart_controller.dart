@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:metro/models/cart_item_model.dart';
 import 'package:metro/models/product_model.dart';
 import 'package:metro/services/api_service.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class CartController extends GetxController {
   var carts = <CartItem>[].obs;
@@ -51,9 +52,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Berhasil',
         'Produk berhasil ditambahkan ke keranjang.',
-        backgroundColor: Colors.green.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.check, color: Colors.white),
+        backgroundColor: AppColors.green,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.check, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -61,9 +62,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal menambahkan produk ke keranjang.',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.error, color: Colors.white),
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.error, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -77,9 +78,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Berhasil',
         'Jumlah produk di keranjang berhasil diperbarui.',
-        backgroundColor: Colors.green.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.check, color: Colors.white),
+        backgroundColor: AppColors.green,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.check, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -87,9 +88,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal memperbarui jumlah produk di keranjang.',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.error, color: Colors.white),
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.error, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -103,9 +104,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Berhasil',
         'Produk berhasil dihapus dari keranjang.',
-        backgroundColor: Colors.green.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.check, color: Colors.white),
+        backgroundColor: AppColors.green,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.check, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -113,9 +114,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal menghapus produk dari keranjang.',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.error, color: Colors.white),
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.error, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -129,9 +130,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Berhasil',
         'Keranjang berhasil dikosongkan.',
-        backgroundColor: Colors.green.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.check, color: Colors.white),
+        backgroundColor: AppColors.green,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.check, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -139,9 +140,9 @@ class CartController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal mengosongkan keranjang.',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.error, color: Colors.white),
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.error, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );

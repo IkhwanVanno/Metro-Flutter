@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/auth_controller.dart';
+import 'package:metro/theme/app_theme.dart';
 import '../routes/app_routes.dart';
 
 class Register extends StatefulWidget {
@@ -42,8 +43,8 @@ class _RegisterState extends State<Register> {
           'Berhasil',
           response['message'] ??
               'Registrasi berhasil. Silakan cek email untuk verifikasi.',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
@@ -53,8 +54,8 @@ class _RegisterState extends State<Register> {
         Get.snackbar(
           'Registrasi Gagal',
           response['message'] ?? 'Terjadi kesalahan saat registrasi',
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
@@ -65,13 +66,13 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black),
           onPressed: () => Get.back(),
         ),
       ),
@@ -91,7 +92,7 @@ class _RegisterState extends State<Register> {
               const Text(
                 'Register',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.black,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                 ),
@@ -168,18 +169,18 @@ class _RegisterState extends State<Register> {
               // Terms and conditions
               RichText(
                 text: TextSpan(
-                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                  style: const TextStyle(color: AppColors.black, fontSize: 14),
                   children: [
                     const TextSpan(text: "By signing up, you agree to our "),
                     TextSpan(
                       text: "Terms & Conditions",
-                      style: const TextStyle(color: Colors.blue),
+                      style: const TextStyle(color: AppColors.primary),
                       recognizer: TapGestureRecognizer()..onTap = () {},
                     ),
                     const TextSpan(text: " and "),
                     TextSpan(
                       text: "Privacy Policy",
-                      style: const TextStyle(color: Colors.blue),
+                      style: const TextStyle(color: AppColors.primary),
                       recognizer: TapGestureRecognizer()..onTap = () {},
                     ),
                   ],
@@ -192,8 +193,8 @@ class _RegisterState extends State<Register> {
                 () => ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: authController.isLoading
-                        ? Colors.grey
-                        : Colors.blue,
+                        ? AppColors.grey
+                        : AppColors.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -207,13 +208,13 @@ class _RegisterState extends State<Register> {
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
+                              AppColors.white,
                             ),
                           ),
                         )
                       : const Text(
                           'Continue',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          style: TextStyle(fontSize: 16, color: AppColors.white),
                         ),
                 ),
               ),
@@ -229,7 +230,7 @@ class _RegisterState extends State<Register> {
                     child: const Text(
                       'Login',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

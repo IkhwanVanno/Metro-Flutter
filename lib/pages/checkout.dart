@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/checkout_controller.dart';
 import 'package:metro/pages/order_success_page.dart';
+import 'package:metro/theme/app_theme.dart';
 import 'package:metro/widgets/address_bottom_sheet.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -18,10 +19,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: const Text('Checkout', style: TextStyle(color: AppColors.black)),
+        backgroundColor: AppColors.white,
         elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: AppColors.black),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -153,7 +154,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         '${item['quantity']}x ${controller.formatCurrency((item['price'] as num?)?.toDouble() ?? 0)}',
                         style: const TextStyle(
                           fontSize: 12,
-                          color: Colors.grey,
+                          color: AppColors.grey,
                         ),
                       ),
                     ],
@@ -165,7 +166,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: AppColors.red,
                   ),
                 ),
               ],
@@ -245,7 +246,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           if (controller.shippingCosts.isEmpty) {
             return const Text(
               'Pilih kurir untuk melihat opsi pengiriman',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: AppColors.grey),
             );
           }
 
@@ -311,7 +312,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           if (controller.paymentMethods.isEmpty) {
             return const Text(
               'Pilih metode pengiriman terlebih dahulu',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: AppColors.grey),
             );
           }
 
@@ -378,13 +379,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
           _buildSummaryRow(
             'Diskon Produk',
             '-${controller.formatCurrency(controller.productDiscount.value)}',
-            color: Colors.green,
+            color: AppColors.green,
           ),
         if (controller.flashsaleDiscount.value > 0)
           _buildSummaryRow(
             'Diskon Flash Sale',
             '-${controller.formatCurrency(controller.flashsaleDiscount.value)}',
-            color: Colors.green,
+            color: AppColors.green,
           ),
         _buildSummaryRow(
           'Subtotal',
@@ -411,7 +412,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             'Total Pembayaran',
             controller.formatCurrency(grandTotal),
             bold: true,
-            color: Colors.red,
+            color: AppColors.red,
           );
         }),
       ],
@@ -450,10 +451,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: AppColors.black,
             blurRadius: 4,
             offset: Offset(0, -1),
           ),
@@ -477,7 +478,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: AppColors.red,
                     ),
                   ),
                 ],
@@ -487,7 +488,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -501,7 +502,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: AppColors.white,
                             strokeWidth: 2,
                           ),
                         )
@@ -509,7 +510,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           'Buat Pesanan',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -531,7 +532,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     Get.bottomSheet(
       AddressBottomSheet(controller: controller),
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       enableDrag: true,
       isDismissible: true,
     );
@@ -603,7 +604,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 '${item['quantity']}x ${controller.formatCurrency((item['price'] as num?)?.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontSize: 11,
-                                  color: Colors.grey,
+                                  color: AppColors.grey,
                                 ),
                               ),
                             ],
@@ -615,7 +616,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.red,
+                            color: AppColors.red,
                             fontSize: 12,
                           ),
                         ),
@@ -646,8 +647,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
       Get.snackbar(
         'Gagal',
         result['message'] ?? 'Gagal membuat pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }

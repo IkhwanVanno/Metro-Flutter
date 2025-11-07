@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 import 'package:metro/models/city_model.dart';
@@ -8,6 +7,7 @@ import 'package:metro/models/province_model.dart';
 import 'package:metro/models/shipping_address_model.dart';
 import 'package:metro/models/shipping_cost_model.dart';
 import 'package:metro/services/api_service.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class CheckoutController extends GetxController {
   // Group Button Controllers
@@ -151,8 +151,8 @@ class CheckoutController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal memuat provinsi',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -173,8 +173,8 @@ class CheckoutController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal memuat kota',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -194,8 +194,8 @@ class CheckoutController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal memuat kecamatan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -228,8 +228,8 @@ class CheckoutController extends GetxController {
         Get.snackbar(
           'Berhasil',
           'Alamat berhasil ditambahkan',
-          backgroundColor: Colors.green.shade600,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
         return;
@@ -240,8 +240,8 @@ class CheckoutController extends GetxController {
       Get.snackbar(
         'Gagal',
         e.toString(),
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -343,8 +343,8 @@ class CheckoutController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal mengecek ongkir: ${e.toString()}',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     } finally {

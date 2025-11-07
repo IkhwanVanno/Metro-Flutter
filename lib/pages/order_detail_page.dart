@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/order_controller.dart';
 import 'package:metro/models/order_detail_model.dart';
+import 'package:metro/theme/app_theme.dart';
 import 'package:metro/widgets/review_dialog.dart';
 
 class OrderDetailPage extends StatefulWidget {
@@ -49,91 +50,18 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     });
   }
 
-  void _showInvoiceOptions() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Invoice Options',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(Icons.download, color: Colors.blue.shade700),
-              ),
-              title: const Text('Download Invoice'),
-              subtitle: const Text('Simpan invoice sebagai PDF'),
-              onTap: () {
-                Navigator.pop(context);
-                controller.downloadInvoice(widget.orderId);
-              },
-            ),
-            const SizedBox(height: 10),
-            ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(Icons.email, color: Colors.green.shade700),
-              ),
-              title: const Text('Kirim ke Email'),
-              subtitle: const Text('Invoice akan dikirim ke email Anda'),
-              onTap: () {
-                Navigator.pop(context);
-                controller.sendInvoiceToEmail(widget.orderId);
-              },
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Detail Pesanan',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: AppColors.black),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.accent,
         elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          // Invoice Button
-          if (orderDetail != null && orderDetail!.paymentStatus == 'paid')
-            IconButton(
-              icon: const Icon(Icons.receipt_long),
-              onPressed: _showInvoiceOptions,
-              tooltip: 'Invoice',
-            ),
-        ],
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: AppColors.black),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -172,64 +100,56 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   Widget _buildInvoiceCard() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Icon(Icons.receipt_long, color: Colors.blue.shade700),
-                const SizedBox(width: 8),
-                const Text(
-                  'Invoice',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => controller.downloadInvoice(widget.orderId),
-                    icon: const Icon(Icons.download, size: 18),
-                    label: const Text('Download'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.blue,
-                      side: const BorderSide(color: Colors.blue),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () =>
-                        controller.sendInvoiceToEmail(widget.orderId),
-                    icon: const Icon(Icons.email, size: 18),
-                    label: const Text('Kirim Email'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Icon(Icons.receipt_long, color: AppColors.primary),
+            const SizedBox(width: 8),
+            const Text(
+              'Invoice',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
-      ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => controller.downloadInvoice(widget.orderId),
+                icon: const Icon(Icons.download, size: 18),
+                label: const Text('Download'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.blue,
+                  side: const BorderSide(color: AppColors.blue),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () => controller.sendInvoiceToEmail(widget.orderId),
+                icon: const Icon(Icons.email, size: 18),
+                label: const Text('Kirim Email'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.green,
+                  foregroundColor: AppColors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -249,7 +169,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 children: [
                   Text(
                     'Status Pesanan',
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                    style: TextStyle(fontSize: 12, color: AppColors.grey),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -269,7 +189,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           const Divider(height: 24),
           Row(
             children: [
-              Icon(Icons.local_shipping, color: Colors.grey.shade600, size: 20),
+              Icon(Icons.local_shipping, color: AppColors.grey, size: 20),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -277,10 +197,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   children: [
                     Text(
                       'Nomor Resi',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade700,
-                      ),
+                      style: TextStyle(fontSize: 12, color: AppColors.grey),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -372,7 +289,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         errorBuilder: (context, error, stack) => Container(
                           width: 80,
                           height: 80,
-                          color: Colors.grey.shade200,
+                          color: AppColors.grey,
                           child: const Icon(Icons.broken_image, size: 40),
                         ),
                       ),
@@ -396,7 +313,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             '${item.quantity}x ${controller.formatCurrency(item.price)}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey.shade600,
+                              color: AppColors.grey,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -405,7 +322,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: Colors.red,
+                              color: AppColors.red,
                             ),
                           ),
                         ],
@@ -422,8 +339,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       icon: const Icon(Icons.rate_review, size: 18),
                       label: const Text('Beri Review'),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.blue,
-                        side: const BorderSide(color: Colors.blue),
+                        foregroundColor: AppColors.blue,
+                        side: const BorderSide(color: AppColors.blue),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -436,15 +353,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.green.shade50,
+                      color: AppColors.green.withAlpha(25),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.green.shade200),
+                      border: Border.all(color: AppColors.green),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.check_circle,
-                          color: Colors.green.shade700,
+                          color: AppColors.green,
                           size: 18,
                         ),
                         const SizedBox(width: 8),
@@ -452,7 +369,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           'Review telah diberikan',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.green.shade700,
+                            color: AppColors.green,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -485,13 +402,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           _buildSummaryRow(
             'Diskon Produk',
             '-${controller.formatCurrency(orderDetail!.totalProductDiscount)}',
-            color: Colors.green,
+            color: AppColors.green,
           ),
         if (orderDetail!.totalFlashsaleDiscount > 0)
           _buildSummaryRow(
             'Diskon Flash Sale',
             '-${controller.formatCurrency(orderDetail!.totalFlashsaleDiscount)}',
-            color: Colors.green,
+            color: AppColors.green,
           ),
         _buildSummaryRow(
           'Subtotal',
@@ -511,7 +428,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           'Total Pembayaran',
           controller.formatCurrency(orderDetail!.grandTotal),
           bold: true,
-          color: Colors.red,
+          color: AppColors.red,
         ),
       ],
     );
@@ -525,7 +442,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         children: [
           SizedBox(
             width: 140,
-            child: Text(label, style: TextStyle(color: Colors.grey.shade700)),
+            child: Text(label, style: TextStyle(color: AppColors.grey)),
           ),
           Expanded(
             child: Text(
@@ -581,10 +498,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: AppColors.black,
             blurRadius: 4,
             offset: Offset(0, -1),
           ),
@@ -603,8 +520,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           'Apakah Anda yakin ingin membatalkan pesanan ini?',
                       textCancel: 'Tidak',
                       textConfirm: 'Ya, Batalkan',
-                      confirmTextColor: Colors.white,
-                      buttonColor: Colors.red,
+                      confirmTextColor: AppColors.white,
+                      buttonColor: AppColors.red,
                       onConfirm: () {
                         Get.back();
                         controller.cancelOrder(widget.orderId).then((_) {
@@ -614,8 +531,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     );
                   },
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.red,
-                    side: const BorderSide(color: Colors.red),
+                    foregroundColor: AppColors.red,
+                    side: const BorderSide(color: AppColors.red),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -630,7 +547,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 child: ElevatedButton(
                   onPressed: () => controller.initiatePayment(widget.orderId),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppColors.blue,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -640,7 +557,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     'Bayar Sekarang',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

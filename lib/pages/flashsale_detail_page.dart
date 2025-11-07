@@ -4,6 +4,7 @@ import 'package:metro/models/flashsale_model.dart';
 import 'package:metro/models/product_model.dart';
 import 'package:metro/services/api_service.dart';
 import 'package:metro/routes/app_routes.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class FlashsaleDetailPage extends StatefulWidget {
   const FlashsaleDetailPage({super.key});
@@ -57,17 +58,18 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.accent,
         elevation: 1,
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black),
           onPressed: () => Get.back(),
         ),
         title: const Text(
           'Flash Sale Detail',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColors.black, fontWeight: FontWeight.bold),
         ),
       ),
       body: isLoading
@@ -80,7 +82,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                   Text(
                     errorMessage,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: AppColors.red),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
@@ -106,16 +108,16 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                           Image.network(
                             flashsale!.imageUrl,
                             width: double.infinity,
-                            height: 200,
+                            height: 100,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stack) => Container(
                               height: 200,
-                              color: Colors.grey[300],
+                              color: AppColors.grey,
                               child: const Center(
                                 child: Icon(
                                   Icons.broken_image,
                                   size: 50,
-                                  color: Colors.grey,
+                                  color: AppColors.grey,
                                 ),
                               ),
                             ),
@@ -134,7 +136,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                               borderRadius: BorderRadius.circular(25),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withAlpha(30),
+                                  color: AppColors.black.withAlpha(30),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -145,14 +147,14 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                               children: [
                                 Icon(
                                   _getTimerStatusIcon(flashsale!.timerStatus),
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 18,
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
                                   flashsale!.getTimerStatusText(),
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
                                   ),
@@ -208,14 +210,14 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                               children: [
                                 Icon(
                                   _getTimerStatusIcon(flashsale!.timerStatus),
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 48,
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
                                   flashsale!.getTimerStatusText(),
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -224,7 +226,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                 Text(
                                   _getTimerDescription(flashsale!.timerStatus),
                                   style: TextStyle(
-                                    color: Colors.white.withAlpha(90),
+                                    color: AppColors.white.withAlpha(90),
                                     fontSize: 14,
                                   ),
                                   textAlign: TextAlign.center,
@@ -238,10 +240,10 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.orange[50],
+                              color: AppColors.orange.withAlpha(30),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: Colors.orange[200]!,
+                                color: AppColors.orange,
                                 width: 2,
                               ),
                             ),
@@ -250,12 +252,12 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Colors.orange,
+                                    color: AppColors.orange,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: const Icon(
                                     Icons.local_offer,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     size: 28,
                                   ),
                                 ),
@@ -269,7 +271,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                         'Diskon Flash Sale',
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: Colors.grey,
+                                          color: AppColors.grey,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
@@ -278,7 +280,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                         style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.orange,
+                                          color: AppColors.orange,
                                         ),
                                       ),
                                     ],
@@ -293,9 +295,9 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: AppColors.grey.withAlpha(30),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey[300]!),
+                              border: Border.all(color: AppColors.grey),
                             ),
                             child: Column(
                               children: [
@@ -304,13 +306,13 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                     Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[100],
+                                        color: AppColors.blue.withAlpha(30),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const Icon(
                                         Icons.calendar_today,
                                         size: 20,
-                                        color: Colors.blue,
+                                        color: AppColors.blue,
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -323,7 +325,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                             'Mulai',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.grey,
+                                              color: AppColors.grey,
                                             ),
                                           ),
                                           Text(
@@ -346,13 +348,13 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                     Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Colors.red[100],
+                                        color: AppColors.red.withAlpha(30),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const Icon(
                                         Icons.event_busy,
                                         size: 20,
-                                        color: Colors.red,
+                                        color: AppColors.red,
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -365,7 +367,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                             'Berakhir',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.grey,
+                                              color: AppColors.grey,
                                             ),
                                           ),
                                           Text(
@@ -399,7 +401,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                               flashsale!.description,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey[700],
+                                color: AppColors.grey,
                                 height: 1.5,
                               ),
                               textAlign: TextAlign.justify,
@@ -424,7 +426,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.blue[50],
+                                  color: AppColors.blue.withAlpha(30),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
@@ -432,7 +434,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blue[700],
+                                    color: AppColors.blue,
                                   ),
                                 ),
                               ),
@@ -452,13 +454,13 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                                   Icon(
                                     Icons.inventory_2_outlined,
                                     size: 64,
-                                    color: Colors.grey[400],
+                                    color: AppColors.grey,
                                   ),
                                   const SizedBox(height: 16),
                                   const Text(
                                     'Tidak ada produk dalam flash sale ini',
                                     style: TextStyle(
-                                      color: Colors.grey,
+                                      color: AppColors.grey,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -519,7 +521,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                         child: Icon(
                           Icons.broken_image,
                           size: 50,
-                          color: Colors.grey,
+                          color: AppColors.grey,
                         ),
                       ),
                     ),
@@ -534,11 +536,11 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: AppColors.red,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withAlpha(50),
+                            color: AppColors.black.withAlpha(50),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                           ),
@@ -547,7 +549,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                       child: Text(
                         '-${flashsale!.discountFlashSale}%',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
                         ),
@@ -576,12 +578,12 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                   if (product.categoryName != null)
                     Text(
                       product.categoryName!,
-                      style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                      style: TextStyle(fontSize: 10, color: AppColors.grey),
                     ),
                   if (product.rating != null)
                     Row(
                       children: [
-                        const Icon(Icons.star, size: 12, color: Colors.amber),
+                        const Icon(Icons.star, size: 12, color: AppColors.yellow),
                         const SizedBox(width: 2),
                         Text(
                           product.rating!.toStringAsFixed(1),
@@ -595,14 +597,14 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                     product.formattedOriginalPrice,
                     style: TextStyle(
                       fontSize: 10,
-                      color: Colors.grey[600],
+                      color: AppColors.grey,
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),
                   Text(
                     product.formattedPrice,
                     style: const TextStyle(
-                      color: Colors.redAccent,
+                      color: AppColors.red,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
@@ -611,7 +613,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                     'Stok: ${product.stock}',
                     style: TextStyle(
                       fontSize: 10,
-                      color: product.stock > 0 ? Colors.green : Colors.red,
+                      color: product.stock > 0 ? AppColors.green : AppColors.red,
                     ),
                   ),
                 ],

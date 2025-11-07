@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class MembershipCard extends StatelessWidget {
   final String tierName;
@@ -25,7 +26,7 @@ class MembershipCard extends StatelessWidget {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: Colors.white,
+      color: AppColors.white,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -54,7 +55,7 @@ class MembershipCard extends StatelessWidget {
                       const Text(
                         'Status Membership',
                         style: TextStyle(
-                          color: Colors.black54,
+                          color: AppColors.black,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -63,7 +64,7 @@ class MembershipCard extends StatelessWidget {
                       Text(
                         tierName.toUpperCase(),
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: AppColors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -80,7 +81,7 @@ class MembershipCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: AppColors.grey.withAlpha(30),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -89,7 +90,7 @@ class MembershipCard extends StatelessWidget {
                   const Text(
                     'Total Transaksi',
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: AppColors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -97,7 +98,7 @@ class MembershipCard extends StatelessWidget {
                   Text(
                     formattedTotal,
                     style: const TextStyle(
-                      color: Colors.blueAccent,
+                      color: AppColors.blue,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -112,7 +113,7 @@ class MembershipCard extends StatelessWidget {
               const Text(
                 'Progress ke Level Selanjutnya',
                 style: TextStyle(
-                  color: Colors.black54,
+                  color: AppColors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -124,9 +125,9 @@ class MembershipCard extends StatelessWidget {
                   value: progressPercentage != null
                       ? progressPercentage! / 100
                       : 0,
-                  backgroundColor: Colors.grey.shade300,
+                  backgroundColor: AppColors.grey,
                   valueColor: const AlwaysStoppedAnimation<Color>(
-                    Colors.blueAccent,
+                    AppColors.blue,
                   ),
                   minHeight: 8,
                 ),
@@ -134,7 +135,7 @@ class MembershipCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 'Sisa ${_formatCurrency(remaining!)} lagi untuk level berikutnya',
-                style: const TextStyle(color: Colors.black54, fontSize: 12),
+                style: const TextStyle(color: AppColors.black, fontSize: 12),
               ),
             ],
           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/auth_controller.dart';
 import 'package:metro/services/api_service.dart';
+import 'package:metro/theme/app_theme.dart';
 import 'package:metro/widgets/membership_card.dart';
 import '../routes/app_routes.dart';
 
@@ -93,8 +94,8 @@ class _ProfilePageState extends State<ProfilePage> {
         Get.snackbar(
           'Berhasil',
           response['message'] ?? 'Profil berhasil diperbarui',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 2),
         );
@@ -106,8 +107,8 @@ class _ProfilePageState extends State<ProfilePage> {
         Get.snackbar(
           'Gagal',
           response['message'] ?? 'Gagal memperbarui profil',
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
@@ -129,13 +130,13 @@ class _ProfilePageState extends State<ProfilePage> {
               Get.snackbar(
                 'Berhasil',
                 'Logout berhasil',
-                backgroundColor: Colors.green,
-                colorText: Colors.white,
+                backgroundColor: AppColors.green,
+                colorText: AppColors.white,
                 snackPosition: SnackPosition.TOP,
                 duration: const Duration(seconds: 2),
               );
             },
-            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+            child: const Text('Logout', style: TextStyle(color: AppColors.red)),
           ),
         ],
       ),
@@ -146,11 +147,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: const Text('Profile', style: TextStyle(color: AppColors.black)),
+        backgroundColor: AppColors.accent,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: AppColors.black),
         actions: [
           Obx(() {
             if (authController.isLoggedIn) {
@@ -173,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Text(
                     isEditing ? 'Batal' : 'Edit',
                     style: const TextStyle(
-                      color: Colors.black,
+                      color: AppColors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -185,7 +186,6 @@ class _ProfilePageState extends State<ProfilePage> {
           }),
         ],
       ),
-      backgroundColor: Colors.grey.shade100,
       body: Obx(() {
         if (!authController.isLoggedIn) {
           return _buildLoginPrompt();
@@ -205,13 +205,13 @@ class _ProfilePageState extends State<ProfilePage> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.blue.withAlpha(25),
+                color: AppColors.primary.withAlpha(25),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.person_outline,
                 size: 80,
-                color: Colors.blue,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 32),
@@ -227,14 +227,14 @@ class _ProfilePageState extends State<ProfilePage> {
             const Text(
               'Please login to view and edit\nyour profile information',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
+              style: TextStyle(fontSize: 16, color: AppColors.grey, height: 1.5),
             ),
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -245,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   'Login Now',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -257,14 +257,14 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 const Text(
                   "Don't have an account? ",
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: AppColors.grey),
                 ),
                 TextButton(
                   onPressed: () => Get.toNamed(AppRoutes.register),
                   child: const Text(
                     'Register',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -284,14 +284,14 @@ class _ProfilePageState extends State<ProfilePage> {
           // Profile Header
           Container(
             width: double.infinity,
-            color: Colors.white,
+            color: AppColors.white,
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
                 const CircleAvatar(
                   radius: 40,
-                  backgroundColor: Colors.blue,
-                  child: Icon(Icons.person, size: 50, color: Colors.white),
+                  backgroundColor: AppColors.blue,
+                  child: Icon(Icons.person, size: 50, color: AppColors.white),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -304,7 +304,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(height: 4),
                 Text(
                   authController.currentUser?.email ?? '',
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 14, color: AppColors.grey),
                 ),
               ],
             ),
@@ -318,7 +318,7 @@ class _ProfilePageState extends State<ProfilePage> {
             )
           else if (membershipInfo != null)
             Container(
-              color: Colors.white,
+              color: AppColors.white,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: MembershipCard(
@@ -341,7 +341,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           // Profile Form
           Container(
-            color: Colors.white,
+            color: AppColors.white,
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,16 +362,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: Colors.grey),
+                      borderSide: const BorderSide(color: AppColors.grey),
                     ),
                     disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                      borderSide: BorderSide(color: AppColors.grey),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: const BorderSide(
-                        color: Colors.blue,
+                        color: AppColors.blue,
                         width: 2,
                       ),
                     ),
@@ -389,16 +389,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: Colors.grey),
+                      borderSide: const BorderSide(color: AppColors.grey),
                     ),
                     disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                      borderSide: BorderSide(color: AppColors.grey),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: const BorderSide(
-                        color: Colors.blue,
+                        color: AppColors.blue,
                         width: 2,
                       ),
                     ),
@@ -417,16 +417,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(color: Colors.grey),
+                      borderSide: const BorderSide(color: AppColors.grey),
                     ),
                     disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
+                      borderSide: BorderSide(color: AppColors.grey),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: const BorderSide(
-                        color: Colors.blue,
+                        color: AppColors.blue,
                         width: 2,
                       ),
                     ),
@@ -457,12 +457,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: Colors.grey),
+                        borderSide: const BorderSide(color: AppColors.grey),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: const BorderSide(
-                          color: Colors.blue,
+                          color: AppColors.blue,
                           width: 2,
                         ),
                       ),
@@ -471,7 +471,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 12),
                   const Text(
                     'Leave password empty to keep current password',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: AppColors.grey),
                   ),
                 ],
                 const SizedBox(height: 24),
@@ -481,8 +481,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: authController.isLoading
-                            ? Colors.grey
-                            : Colors.blue,
+                            ? AppColors.grey
+                            : AppColors.blue,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -498,7 +498,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white,
+                                  AppColors.white,
                                 ),
                               ),
                             )
@@ -506,7 +506,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               'Save Changes',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                     ),
@@ -516,7 +516,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
+                      backgroundColor: AppColors.red,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -525,7 +525,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: _handleLogout,
                     child: const Text(
                       'Logout',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: TextStyle(fontSize: 16, color: AppColors.white),
                     ),
                   ),
                 ),

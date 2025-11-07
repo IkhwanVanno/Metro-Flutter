@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:metro/models/favorite_model.dart';
 import 'package:metro/models/product_model.dart';
 import 'package:metro/services/api_service.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class FavoriteController extends GetxController {
   var favorites = <Favorite>[].obs;
@@ -60,9 +61,9 @@ class FavoriteController extends GetxController {
       Get.snackbar(
         'Berhasil',
         response['message'] ?? 'Produk ditambahkan ke favorit',
-        backgroundColor: Colors.green.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.check_circle, color: Colors.white),
+        backgroundColor: AppColors.green,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.check_circle, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -70,9 +71,9 @@ class FavoriteController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal menambahkan produk ke favorit',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.error, color: Colors.white),
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.error, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -86,9 +87,9 @@ class FavoriteController extends GetxController {
       Get.snackbar(
         'Berhasil',
         response['message'] ?? 'Produk dihapus dari favorit',
-        backgroundColor: Colors.green.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.check_circle, color: Colors.white),
+        backgroundColor: AppColors.green,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.check_circle, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );
@@ -96,9 +97,9 @@ class FavoriteController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal menghapus produk dari favorit',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
-        icon: const Icon(Icons.error, color: Colors.white),
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
+        icon: const Icon(Icons.error, color: AppColors.white),
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(10),
       );

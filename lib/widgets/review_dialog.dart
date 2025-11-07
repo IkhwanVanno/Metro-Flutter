@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/review_controller.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class ReviewDialog extends StatefulWidget {
   final int orderId;
@@ -37,8 +38,8 @@ class _ReviewDialogState extends State<ReviewDialog> {
       Get.snackbar(
         'Peringatan',
         'Review minimal 5 karakter',
-        backgroundColor: Colors.orange.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.orange,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
       return;
@@ -104,7 +105,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                         errorBuilder: (context, error, stack) => Container(
                           width: 60,
                           height: 60,
-                          color: Colors.grey.shade200,
+                          color: AppColors.grey,
                           child: Icon(Icons.broken_image, size: 30),
                         ),
                       ),
@@ -144,7 +145,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                           icon: Icon(
                             index < rating ? Icons.star : Icons.star_border,
                             size: 40,
-                            color: Colors.amber,
+                            color: AppColors.yellow,
                           ),
                           onPressed: () {
                             setState(() {
@@ -158,7 +159,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                       _getRatingText(rating),
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey.shade700,
+                        color: AppColors.grey,
                       ),
                     ),
                   ],
@@ -183,7 +184,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.blue, width: 2),
+                    borderSide: BorderSide(color: AppColors.blue, width: 2),
                   ),
                 ),
               ),
@@ -219,7 +220,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                         ? null
                         : _submitReview,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: AppColors.primary,
                       padding: EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -232,7 +233,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
+                                AppColors.white,
                               ),
                             ),
                           )
@@ -240,7 +241,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
                             'Kirim Review',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

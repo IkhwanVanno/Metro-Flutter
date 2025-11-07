@@ -1,4 +1,5 @@
 class SiteConfig {
+  final String title;
   final String email;
   final String phone;
   final String address;
@@ -25,6 +26,7 @@ class SiteConfig {
   final String logoUrl;
 
   SiteConfig({
+    required this.title,
     required this.email,
     required this.phone,
     required this.address,
@@ -53,6 +55,7 @@ class SiteConfig {
 
   factory SiteConfig.fromJson(Map<String, dynamic> json) {
     return SiteConfig(
+      title: json['title'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
       address: json['address'] ?? '',

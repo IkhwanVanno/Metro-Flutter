@@ -4,6 +4,7 @@ import 'package:metro/controller/auth_controller.dart';
 import 'package:metro/controller/order_controller.dart';
 import 'package:metro/pages/order_detail_page.dart';
 import 'package:metro/routes/app_routes.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
@@ -30,11 +31,12 @@ class _OrderPageState extends State<OrderPage> {
       appBar: AppBar(
         title: const Text(
           'Pesanan Saya',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: AppColors.black),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.accent,
         elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: AppColors.black),
       ),
       body: Obx(() {
         if (!authController.isLoggedIn) {
@@ -61,13 +63,13 @@ class _OrderPageState extends State<OrderPage> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.blue.withAlpha(25),
+                color: AppColors.primary.withAlpha(25),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.shopping_bag,
                 size: 80,
-                color: Colors.blue,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 32),
@@ -76,21 +78,21 @@ class _OrderPageState extends State<OrderPage> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
             const SizedBox(height: 12),
             const Text(
               'Please login to view your orders',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: AppColors.grey),
             ),
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -101,7 +103,7 @@ class _OrderPageState extends State<OrderPage> {
                   'Login Now',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -116,7 +118,7 @@ class _OrderPageState extends State<OrderPage> {
   Widget _buildStatusFilter() {
     return Container(
       height: 50,
-      color: Colors.white,
+      color: AppColors.white,
       child: Obx(() {
         final selectedStatus = controller.selectedStatus.value;
         return ListView.builder(
@@ -133,10 +135,10 @@ class _OrderPageState extends State<OrderPage> {
                 label: Text(_getFilterLabel(status)),
                 selected: isSelected,
                 onSelected: (selected) => controller.filterByStatus(status),
-                backgroundColor: Colors.grey.shade200,
-                selectedColor: Colors.blue.shade100,
+                backgroundColor: AppColors.grey.withAlpha(25),
+                selectedColor: AppColors.secondary.withAlpha(25),
                 labelStyle: TextStyle(
-                  color: isSelected ? Colors.blue.shade900 : Colors.black87,
+                  color: isSelected ? AppColors.primary : AppColors.black,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
@@ -161,12 +163,12 @@ class _OrderPageState extends State<OrderPage> {
               Icon(
                 Icons.shopping_bag_outlined,
                 size: 80,
-                color: Colors.grey.shade400,
+                color: AppColors.grey,
               ),
               const SizedBox(height: 16),
               Text(
                 'Belum ada pesanan',
-                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                style: TextStyle(fontSize: 16, color: AppColors.grey),
               ),
             ],
           ),
@@ -223,7 +225,7 @@ class _OrderPageState extends State<OrderPage> {
                           _formatDate(order.createdAt),
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: AppColors.black,
                           ),
                         ),
                       ],
@@ -254,18 +256,18 @@ class _OrderPageState extends State<OrderPage> {
               // Payment Info
               Row(
                 children: [
-                  Icon(Icons.payment, size: 16, color: Colors.grey.shade600),
+                  Icon(Icons.payment, size: 16, color: AppColors.black),
                   const SizedBox(width: 8),
                   Text(
                     order.paymentMethod,
-                    style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                    style: TextStyle(fontSize: 13, color: AppColors.black),
                   ),
                   const Spacer(),
                   Text(
                     controller.formatCurrency(order.grandTotal),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: AppColors.red,
                       fontSize: 16,
                     ),
                   ),
@@ -279,12 +281,12 @@ class _OrderPageState extends State<OrderPage> {
                   Icon(
                     Icons.local_shipping,
                     size: 16,
-                    color: Colors.grey.shade600,
+                    color: AppColors.black,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     order.shippingCourier,
-                    style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                    style: TextStyle(fontSize: 13, color: AppColors.black),
                   ),
                   if (order.trackingNumber != null) ...[
                     const SizedBox(width: 8),
@@ -293,7 +295,7 @@ class _OrderPageState extends State<OrderPage> {
                         '• ${order.trackingNumber}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey.shade600,
+                          color: AppColors.grey,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -312,8 +314,8 @@ class _OrderPageState extends State<OrderPage> {
                         child: OutlinedButton(
                           onPressed: () => _showCancelDialog(order.id),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.red,
-                            side: const BorderSide(color: Colors.red),
+                            foregroundColor: AppColors.red,
+                            side: const BorderSide(color: AppColors.red),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -328,14 +330,14 @@ class _OrderPageState extends State<OrderPage> {
                         child: ElevatedButton(
                           onPressed: () => controller.initiatePayment(order.id),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: AppColors.blue,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           child: const Text(
                             'Bayar Sekarang',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppColors.white),
                           ),
                         ),
                       ),
@@ -351,14 +353,14 @@ class _OrderPageState extends State<OrderPage> {
                   child: ElevatedButton(
                     onPressed: () => _showCompletedDialog(order.id),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppColors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: const Text(
                       'Pesanan Diterima',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: AppColors.white),
                     ),
                   ),
                 ),
@@ -376,8 +378,8 @@ class _OrderPageState extends State<OrderPage> {
       middleText: 'Apakah Anda yakin ingin membatalkan pesanan ini?',
       textCancel: 'Tidak',
       textConfirm: 'Ya, Batalkan',
-      confirmTextColor: Colors.white,
-      buttonColor: Colors.red,
+      confirmTextColor: AppColors.white,
+      buttonColor: AppColors.red,
       onConfirm: () {
         Get.back();
         controller.cancelOrder(orderId);
@@ -391,8 +393,8 @@ class _OrderPageState extends State<OrderPage> {
       middleText: 'Apakah pesanan sudah Anda terima dengan baik?',
       textCancel: 'Belum',
       textConfirm: 'Ya, Sudah',
-      confirmTextColor: Colors.white,
-      buttonColor: Colors.green,
+      confirmTextColor: AppColors.white,
+      buttonColor: AppColors.green,
       onConfirm: () {
         Get.back();
         controller.markAsCompleted(orderId);

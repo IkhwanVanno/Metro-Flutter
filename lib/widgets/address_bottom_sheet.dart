@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/checkout_controller.dart';
 import 'package:metro/models/shipping_address_model.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class AddressBottomSheet extends StatelessWidget {
   final CheckoutController controller;
@@ -17,7 +18,7 @@ class AddressBottomSheet extends StatelessWidget {
 
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -29,7 +30,7 @@ class AddressBottomSheet extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey.shade300,
+              color: AppColors.grey,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -75,7 +76,7 @@ class AddressBottomSheet extends StatelessWidget {
                         Icon(
                           Icons.location_off,
                           size: 80,
-                          color: Colors.grey.shade400,
+                          color: AppColors.grey,
                         ),
                         const SizedBox(height: 16),
                         const Text(
@@ -87,7 +88,7 @@ class AddressBottomSheet extends StatelessWidget {
                           'Tambahkan alamat pengiriman Anda',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey.shade600,
+                            color: AppColors.grey,
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -99,8 +100,8 @@ class AddressBottomSheet extends StatelessWidget {
                           icon: const Icon(Icons.add),
                           label: const Text('Tambah Alamat'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
+                            backgroundColor: AppColors.blue,
+                            foregroundColor: AppColors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 24,
                               vertical: 12,
@@ -134,12 +135,12 @@ class AddressBottomSheet extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: isSelected
-                              ? Colors.blue
-                              : Colors.grey.shade300,
+                              ? AppColors.blue
+                              : AppColors.grey,
                           width: isSelected ? 2 : 1,
                         ),
                         borderRadius: BorderRadius.circular(12),
-                        color: isSelected ? Colors.blue.shade50 : Colors.white,
+                        color: isSelected ? AppColors.blue.withAlpha(30) : AppColors.white,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +159,7 @@ class AddressBottomSheet extends StatelessWidget {
                               IconButton(
                                 icon: const Icon(
                                   Icons.edit,
-                                  color: Colors.blue,
+                                  color: AppColors.blue,
                                 ),
                                 tooltip: 'Edit Alamat',
                                 onPressed: () {
@@ -171,7 +172,7 @@ class AddressBottomSheet extends StatelessWidget {
                               IconButton(
                                 icon: const Icon(
                                   Icons.delete,
-                                  color: Colors.red,
+                                  color: AppColors.red,
                                 ),
                                 tooltip: 'Hapus Alamat',
                                 onPressed: () {
@@ -186,14 +187,14 @@ class AddressBottomSheet extends StatelessWidget {
                                     vertical: 4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.green.shade100,
+                                    color: AppColors.green,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
                                     'Default',
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: Colors.green.shade900,
+                                      color: AppColors.green,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -202,7 +203,7 @@ class AddressBottomSheet extends StatelessWidget {
                               if (isSelected)
                                 const Icon(
                                   Icons.check_circle,
-                                  color: Colors.blue,
+                                  color: AppColors.blue,
                                   size: 24,
                                 ),
                             ],
@@ -218,7 +219,7 @@ class AddressBottomSheet extends StatelessWidget {
                             '${address.address}, ${address.districtName}, ${address.cityName}, ${address.provinceName} ${address.postalCode}',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Colors.grey.shade700,
+                              color: AppColors.grey,
                             ),
                           ),
                         ],
@@ -515,8 +516,8 @@ class AddressBottomSheet extends StatelessWidget {
                           },
 
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.white,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                           child: const Text('Simpan Alamat'),

@@ -4,6 +4,7 @@ import 'package:metro/models/eventshop_model.dart';
 import 'package:metro/models/product_model.dart';
 import 'package:metro/services/api_service.dart';
 import 'package:metro/routes/app_routes.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class EventshopDetailPage extends StatefulWidget {
   const EventshopDetailPage({super.key});
@@ -57,17 +58,18 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.accent,
         elevation: 1,
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black),
           onPressed: () => Get.back(),
         ),
         title: const Text(
           'Event Shop Detail',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: AppColors.black, fontWeight: FontWeight.bold),
         ),
       ),
       body: isLoading
@@ -80,7 +82,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                   Text(
                     errorMessage,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.red),
+                    style: const TextStyle(color: AppColors.red),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
@@ -104,16 +106,16 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                       Image.network(
                         eventshop!.image,
                         width: double.infinity,
-                        height: 250,
+                        height: 180,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stack) => Container(
                           height: 250,
-                          color: Colors.grey[300],
+                          color: AppColors.grey,
                           child: const Center(
                             child: Icon(
                               Icons.broken_image,
                               size: 50,
-                              color: Colors.grey,
+                              color: AppColors.grey,
                             ),
                           ),
                         ),
@@ -139,10 +141,10 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.blue[50],
+                              color: AppColors.blue.withAlpha(30),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: Colors.blue[200]!,
+                                color: AppColors.blue,
                                 width: 1,
                               ),
                             ),
@@ -153,7 +155,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                                     const Icon(
                                       Icons.event,
                                       size: 20,
-                                      color: Colors.blue,
+                                      color: AppColors.blue,
                                     ),
                                     const SizedBox(width: 8),
                                     const Text(
@@ -171,7 +173,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                                     const Icon(
                                       Icons.calendar_today,
                                       size: 16,
-                                      color: Colors.grey,
+                                      color: AppColors.grey,
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
@@ -186,7 +188,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                                     const Icon(
                                       Icons.calendar_today,
                                       size: 16,
-                                      color: Colors.grey,
+                                      color: AppColors.grey,
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
@@ -216,7 +218,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                               eventshop!.description,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey[700],
+                                color: AppColors.grey,
                                 height: 1.5,
                               ),
                               textAlign: TextAlign.justify,
@@ -259,7 +261,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                                 '${products.length} Produk',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey[600],
+                                  color: AppColors.grey,
                                 ),
                               ),
                             ],
@@ -275,7 +277,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                             child: Center(
                               child: Text(
                                 'Tidak ada produk dalam event ini',
-                                style: TextStyle(color: Colors.grey),
+                                style: TextStyle(color: AppColors.grey),
                               ),
                             ),
                           )
@@ -315,15 +317,15 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
     IconData statusIcon;
 
     if (isActive) {
-      statusColor = Colors.green;
+      statusColor = AppColors.green;
       statusText = 'SEDANG BERLANGSUNG';
       statusIcon = Icons.check_circle;
     } else if (isUpcoming) {
-      statusColor = Colors.orange;
+      statusColor = AppColors.orange;
       statusText = 'AKAN DATANG';
       statusIcon = Icons.schedule;
     } else {
-      statusColor = Colors.red;
+      statusColor = AppColors.red;
       statusText = 'TELAH BERAKHIR';
       statusIcon = Icons.cancel;
     }
@@ -338,12 +340,12 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(statusIcon, size: 16, color: Colors.white),
+          Icon(statusIcon, size: 16, color: AppColors.white),
           const SizedBox(width: 6),
           Text(
             statusText,
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.white,
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
@@ -382,7 +384,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                         child: Icon(
                           Icons.broken_image,
                           size: 50,
-                          color: Colors.grey,
+                          color: AppColors.grey,
                         ),
                       ),
                     ),
@@ -398,13 +400,13 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: AppColors.red,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           '-${product.discountPercentage.toStringAsFixed(0)}%',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -421,13 +423,13 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: AppColors.blue,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: const Text(
                         '🎉 EVENT',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 9,
                           fontWeight: FontWeight.bold,
                         ),
@@ -456,12 +458,12 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                   if (product.categoryName != null)
                     Text(
                       product.categoryName!,
-                      style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                      style: TextStyle(fontSize: 10, color: AppColors.grey),
                     ),
                   if (product.rating != null)
                     Row(
                       children: [
-                        const Icon(Icons.star, size: 12, color: Colors.amber),
+                        const Icon(Icons.star, size: 12, color: AppColors.yellow),
                         const SizedBox(width: 2),
                         Text(
                           product.rating!.toStringAsFixed(1),
@@ -476,14 +478,14 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                       product.formattedOriginalPrice,
                       style: TextStyle(
                         fontSize: 10,
-                        color: Colors.grey[600],
+                        color: AppColors.grey,
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
                     Text(
                       product.formattedPrice,
                       style: const TextStyle(
-                        color: Colors.redAccent,
+                        color: AppColors.red,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -492,7 +494,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                     Text(
                       product.formattedPrice,
                       style: const TextStyle(
-                        color: Colors.redAccent,
+                        color: AppColors.red,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -501,7 +503,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
                     'Stok: ${product.stock}',
                     style: TextStyle(
                       fontSize: 10,
-                      color: product.stock > 0 ? Colors.green : Colors.red,
+                      color: product.stock > 0 ? AppColors.green : AppColors.red,
                     ),
                   ),
                 ],

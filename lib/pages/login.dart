@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/auth_controller.dart';
+import 'package:metro/theme/app_theme.dart';
 import '../routes/app_routes.dart';
 
 class Login extends StatefulWidget {
@@ -34,8 +35,8 @@ class _LoginState extends State<Login> {
         Get.snackbar(
           'Berhasil',
           response['message'] ?? 'Login berhasil',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 2),
         );
@@ -44,8 +45,8 @@ class _LoginState extends State<Login> {
         Get.snackbar(
           'Login Gagal',
           response['message'] ?? 'Terjadi kesalahan',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
@@ -61,8 +62,8 @@ class _LoginState extends State<Login> {
         Get.snackbar(
           'Berhasil',
           response['message'] ?? 'Login Google berhasil',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 2),
         );
@@ -71,8 +72,8 @@ class _LoginState extends State<Login> {
         Get.snackbar(
           'Login Gagal',
           response['message'] ?? 'Terjadi kesalahan',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
         );
@@ -83,13 +84,13 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.black),
           onPressed: () => Get.back(),
         ),
       ),
@@ -99,7 +100,7 @@ class _LoginState extends State<Login> {
             flex: 3,
             child: Container(
               width: double.infinity,
-              color: Colors.white,
+              color: AppColors.white,
               child: Image.asset(
                 'assets/images/background.png',
                 fit: BoxFit.contain,
@@ -118,7 +119,7 @@ class _LoginState extends State<Login> {
                     const Text(
                       'Login',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: AppColors.black,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -128,7 +129,7 @@ class _LoginState extends State<Login> {
                     // Email field
                     Row(
                       children: [
-                        const Icon(Icons.email_outlined, color: Colors.grey),
+                        const Icon(Icons.email_outlined, color: AppColors.grey),
                         const SizedBox(width: 10),
                         Flexible(
                           child: TextField(
@@ -137,14 +138,14 @@ class _LoginState extends State<Login> {
                             decoration: const InputDecoration(
                               labelText: 'Email ID',
                               border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
+                                borderSide: BorderSide(color: AppColors.grey),
                               ),
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
+                                borderSide: BorderSide(color: AppColors.grey),
                               ),
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.blue,
+                                  color: AppColors.blue,
                                   width: 2,
                                 ),
                               ),
@@ -158,7 +159,7 @@ class _LoginState extends State<Login> {
                     // Password field
                     Row(
                       children: [
-                        const Icon(Icons.lock_outline, color: Colors.grey),
+                        const Icon(Icons.lock_outline, color: AppColors.grey),
                         const SizedBox(width: 10),
                         Flexible(
                           child: TextField(
@@ -180,14 +181,14 @@ class _LoginState extends State<Login> {
                                 },
                               ),
                               border: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
+                                borderSide: BorderSide(color: AppColors.grey),
                               ),
                               enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
+                                borderSide: BorderSide(color: AppColors.grey),
                               ),
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.blue,
+                                  color: AppColors.blue,
                                   width: 2,
                                 ),
                               ),
@@ -207,7 +208,7 @@ class _LoginState extends State<Login> {
                         },
                         child: const Text(
                           'Forget Password',
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: AppColors.primary),
                         ),
                       ),
                     ),
@@ -218,8 +219,8 @@ class _LoginState extends State<Login> {
                       () => ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: authController.isLoading
-                              ? Colors.grey
-                              : Colors.blue,
+                              ? AppColors.grey
+                              : AppColors.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -235,7 +236,7 @@ class _LoginState extends State<Login> {
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white,
+                                    AppColors.white,
                                   ),
                                 ),
                               )
@@ -243,7 +244,7 @@ class _LoginState extends State<Login> {
                                 'Login',
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                 ),
                               ),
                       ),
@@ -272,10 +273,10 @@ class _LoginState extends State<Login> {
                         ),
                         label: const Text(
                           'Login with Google',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: AppColors.black),
                         ),
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.grey),
+                          side: const BorderSide(color: AppColors.grey),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -298,7 +299,7 @@ class _LoginState extends State<Login> {
                           child: const Text(
                             'Register',
                             style: TextStyle(
-                              color: Colors.blue,
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

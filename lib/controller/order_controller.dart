@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/models/order_detail_model.dart';
 import 'package:metro/services/api_service.dart';
+import 'package:metro/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -57,8 +58,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal memuat pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     } finally {
@@ -77,8 +78,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         response['message'] ?? 'Gagal memuat detail pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
       return null;
@@ -87,8 +88,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal memuat detail pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
       return null;
@@ -110,8 +111,8 @@ class OrderController extends GetxController {
         Get.snackbar(
           'Berhasil',
           response['message'] ?? 'Pesanan berhasil dibatalkan',
-          backgroundColor: Colors.green.shade600,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
         await fetchOrders(showLoading: false);
@@ -121,8 +122,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal membatalkan pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
@@ -131,8 +132,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal membatalkan pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -153,8 +154,8 @@ class OrderController extends GetxController {
         Get.snackbar(
           'Berhasil',
           response['message'] ?? 'Pesanan berhasil diselesaikan',
-          backgroundColor: Colors.green.shade600,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
         await fetchOrders(showLoading: false);
@@ -164,8 +165,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal menyelesaikan pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
@@ -174,8 +175,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal menyelesaikan pesanan',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -204,8 +205,8 @@ class OrderController extends GetxController {
             Get.snackbar(
               'Error',
               'Tidak dapat membuka halaman pembayaran',
-              backgroundColor: Colors.red.shade600,
-              colorText: Colors.white,
+              backgroundColor: AppColors.red,
+              colorText: AppColors.white,
               snackPosition: SnackPosition.TOP,
             );
           }
@@ -215,8 +216,8 @@ class OrderController extends GetxController {
         Get.snackbar(
           'Error',
           'Payment URL tidak ditemukan',
-          backgroundColor: Colors.red.shade600,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
         return;
@@ -225,8 +226,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal memproses pembayaran',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
@@ -235,8 +236,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal memproses pembayaran',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -263,8 +264,8 @@ class OrderController extends GetxController {
           Get.snackbar(
             'Berhasil',
             'Invoice berhasil diunduh ke folder Download',
-            backgroundColor: Colors.green.shade600,
-            colorText: Colors.white,
+            backgroundColor: AppColors.green,
+            colorText: AppColors.white,
             snackPosition: SnackPosition.TOP,
             duration: const Duration(seconds: 4),
           );
@@ -275,8 +276,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal mengunduh invoice',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
@@ -285,8 +286,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal mengunduh invoice: ${e.toString()}',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -309,8 +310,8 @@ class OrderController extends GetxController {
           Get.snackbar(
             'Permission Denied',
             'Izin penyimpanan diperlukan untuk menyimpan file',
-            backgroundColor: Colors.orange.shade600,
-            colorText: Colors.white,
+            backgroundColor: AppColors.orange,
+            colorText: AppColors.white,
             snackPosition: SnackPosition.TOP,
           );
           return null;
@@ -358,8 +359,8 @@ class OrderController extends GetxController {
         Get.snackbar(
           'Berhasil',
           response['message'] ?? 'Invoice berhasil dikirim ke email Anda',
-          backgroundColor: Colors.green.shade600,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 4),
         );
@@ -369,8 +370,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Gagal',
         response['message'] ?? 'Gagal mengirim invoice ke email',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
@@ -379,8 +380,8 @@ class OrderController extends GetxController {
       Get.snackbar(
         'Error',
         'Gagal mengirim invoice ke email',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }
@@ -436,18 +437,18 @@ class OrderController extends GetxController {
     switch (status.toLowerCase()) {
       case 'pending':
       case 'pending_payment':
-        return Colors.orange;
+        return AppColors.orange;
       case 'paid':
       case 'processing':
-        return Colors.blue;
+        return AppColors.blue;
       case 'shipped':
-        return Colors.purple;
+        return AppColors.purple;
       case 'completed':
-        return Colors.green;
+        return AppColors.green;
       case 'cancelled':
-        return Colors.red;
+        return AppColors.red;
       default:
-        return Colors.grey;
+        return AppColors.grey;
     }
   }
 

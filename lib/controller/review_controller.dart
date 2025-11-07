@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/models/review_model.dart';
 import 'package:metro/services/api_service.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class ReviewController extends GetxController {
   var isLoading = false.obs;
@@ -30,8 +30,8 @@ class ReviewController extends GetxController {
         Get.snackbar(
           'Berhasil',
           response['message'] ?? 'Review berhasil dikirim',
-          backgroundColor: Colors.green.shade600,
-          colorText: Colors.white,
+          backgroundColor: AppColors.green,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
         return true;
@@ -39,8 +39,8 @@ class ReviewController extends GetxController {
         Get.snackbar(
           'Gagal',
           response['message'] ?? 'Gagal mengirim review',
-          backgroundColor: Colors.red.shade600,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
         return false;
@@ -50,8 +50,8 @@ class ReviewController extends GetxController {
       Get.snackbar(
         'Error',
         'Terjadi kesalahan saat mengirim review',
-        backgroundColor: Colors.red.shade600,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
       return false;

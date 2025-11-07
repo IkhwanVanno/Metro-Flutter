@@ -5,6 +5,7 @@ import 'package:metro/controller/cart_controller.dart';
 import 'package:metro/controller/favorite_controller.dart';
 import 'package:metro/controller/review_controller.dart';
 import 'package:metro/models/product_model.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;
@@ -62,12 +63,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   },
                   errorBuilder: (context, error, stack) => Container(
                     height: 300,
-                    color: Colors.grey[200],
+                    color: AppColors.grey,
                     child: const Center(
                       child: Icon(
                         Icons.broken_image,
                         size: 80,
-                        color: Colors.grey,
+                        color: AppColors.grey,
                       ),
                     ),
                   ),
@@ -87,13 +88,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: AppColors.red,
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
                               '-${widget.product.discountPercentage.toStringAsFixed(0)}%',
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -107,13 +108,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.orange,
+                              color: AppColors.orange,
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: const Text(
                               '⚡ FLASH SALE',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.white,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -152,21 +153,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.blue[50],
+                            color: AppColors.blue,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
                             widget.product.categoryName!,
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.blue[700],
+                              color: AppColors.white,
                             ),
                           ),
                         ),
                         const SizedBox(width: 8),
                       ],
                       if (widget.product.rating != null) ...[
-                        const Icon(Icons.star, size: 16, color: Colors.amber),
+                        const Icon(Icons.star, size: 16, color: AppColors.yellow,),
                         const SizedBox(width: 4),
                         Text(
                           widget.product.rating!.toStringAsFixed(1),
@@ -182,7 +183,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             '($reviewCount review${reviewCount > 1 ? 's' : ''})',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: AppColors.grey,
                             ),
                           );
                         }),
@@ -197,7 +198,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       widget.product.formattedOriginalPrice,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey[600],
+                        color: AppColors.grey,
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
@@ -207,7 +208,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.redAccent,
+                        color: AppColors.red,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -215,7 +216,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       'Hemat ${(widget.product.originalPrice - widget.product.priceAfterAllDiscount).toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.green[700],
+                        color: AppColors.green,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -225,7 +226,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.redAccent,
+                        color: AppColors.red,
                       ),
                     ),
 
@@ -244,7 +245,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           fontWeight: FontWeight.bold,
                           color: widget.product.stock > 0
                               ? Colors.green
-                              : Colors.red,
+                              : AppColors.red,
                         ),
                       ),
                     ],
@@ -265,7 +266,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.black87,
+                      color: AppColors.black,
                       height: 1.5,
                     ),
                   ),
@@ -278,15 +279,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.orange[50],
+                        color: AppColors.orange,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.orange[200]!),
+                        border: Border.all(color: AppColors.orange),
                       ),
                       child: Row(
                         children: [
                           const Icon(
                             Icons.flash_on,
-                            color: Colors.orange,
+                            color: AppColors.orange,
                             size: 20,
                           ),
                           const SizedBox(width: 8),
@@ -319,10 +320,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withAlpha(20),
+              color: AppColors.grey,
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, -3),
@@ -362,8 +363,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.red,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -387,8 +388,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 label: const Text('Tambah ke Keranjang'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.blue,
+                  foregroundColor: AppColors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -444,7 +445,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: AppColors.grey.withAlpha(50),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -468,7 +469,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               index < averageRating.round()
                                   ? Icons.star
                                   : Icons.star_border,
-                              color: Colors.amber,
+                              color: AppColors.yellow,
                               size: 20,
                             );
                           }),
@@ -478,7 +479,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           '${reviews.length} ulasan',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[600],
+                            color: AppColors.grey,
                           ),
                         ),
                       ],
@@ -508,15 +509,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               const Icon(
                                 Icons.star,
                                 size: 12,
-                                color: Colors.amber,
+                                color: AppColors.yellow,
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: LinearProgressIndicator(
                                   value: percentage / 100,
-                                  backgroundColor: Colors.grey[300],
+                                  backgroundColor: AppColors.grey,
                                   valueColor: const AlwaysStoppedAnimation(
-                                    Colors.amber,
+                                    AppColors.yellow,
                                   ),
                                 ),
                               ),
@@ -525,7 +526,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 '$count',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey[600],
+                                  color: AppColors.grey,
                                 ),
                               ),
                             ],
@@ -550,12 +551,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Icon(
                       Icons.rate_review_outlined,
                       size: 48,
-                      color: Colors.grey[400],
+                      color: AppColors.grey,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'Belum ada ulasan',
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: TextStyle(color: AppColors.grey),
                     ),
                   ],
                 ),
@@ -585,11 +586,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundColor: Colors.blue[100],
+              backgroundColor: AppColors.blue.withAlpha(25),
               child: Text(
                 review.authorName[0].toUpperCase(),
                 style: TextStyle(
-                  color: Colors.blue[700],
+                  color: AppColors.blue,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -615,7 +616,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ? Icons.star
                               : Icons.star_border,
                           size: 16,
-                          color: Colors.amber,
+                          color: AppColors.yellow,
                         );
                       }),
                       const SizedBox(width: 8),
@@ -640,14 +641,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.9,
         minChildSize: 0.5,
         maxChildSize: 0.95,
         builder: (context, scrollController) => Container(
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -658,7 +659,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppColors.grey,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),

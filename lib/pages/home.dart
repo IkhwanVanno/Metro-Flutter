@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:metro/controller/product_controller.dart';
 import 'package:metro/controller/siteconfig_controller.dart';
 import 'package:metro/models/flashsale_model.dart';
+import 'package:metro/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../routes/app_routes.dart';
 
@@ -41,13 +42,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: Obx(() {
           final site = siteController.siteConfig.value;
           return AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.accent,
             elevation: 1,
             titleSpacing: 0,
             title: Row(
@@ -63,51 +64,42 @@ class _HomeState extends State<Home> {
                       : const Text(
                           'Home',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: AppColors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
                         ),
                 ),
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(
-                        AppRoutes.searchresultpage,
-                      ); // arahkan ke halaman pencarian
-                    },
-                    child: Container(
-                      height: 38,
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.search, color: Colors.grey),
-                          SizedBox(width: 6),
-                          Text(
-                            'Cari produk...',
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                  child: site != null && site.title.isNotEmpty
+                      ? Text(
+                          site.title,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        )
+                      : const Text(
+                          'E-Commerece',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
 
                 const SizedBox(width: 8),
                 IconButton(
                   icon: const Icon(
                     Icons.shopping_cart_outlined,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
                   onPressed: () => Get.toNamed(AppRoutes.cartpage),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.favorite_border, color: Colors.black),
+                  icon: const Icon(Icons.favorite_border, color: AppColors.black),
                   onPressed: () => Get.toNamed(AppRoutes.favoritepage),
                 ),
               ],
@@ -218,7 +210,7 @@ class _HomeState extends State<Home> {
                 child: Text(
                   site.aboutDescription,
                   textAlign: TextAlign.justify,
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                  style: const TextStyle(fontSize: 14, color: AppColors.black),
                 ),
               ),
               const SizedBox(height: 30),
@@ -256,7 +248,7 @@ class _HomeState extends State<Home> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
+                      color: AppColors.black,
                     ),
                   ),
                   if (flashSale.isNotEmpty)
@@ -266,7 +258,7 @@ class _HomeState extends State<Home> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.red[50],
+                        color: AppColors.red,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -275,7 +267,7 @@ class _HomeState extends State<Home> {
                           Icon(
                             Icons.flash_on,
                             size: 14,
-                            color: Colors.red[700],
+                            color: AppColors.white,
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -283,7 +275,7 @@ class _HomeState extends State<Home> {
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
-                              color: Colors.red[700],
+                              color: AppColors.white,
                             ),
                           ),
                         ],
@@ -353,8 +345,8 @@ class _HomeState extends State<Home> {
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                                 colors: [
-                                  Colors.transparent,
-                                  Colors.black.withAlpha(60),
+                                  AppColors.transparent,
+                                  AppColors.black.withAlpha(200),
                                 ],
                               ),
                             ),
@@ -374,7 +366,7 @@ class _HomeState extends State<Home> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withAlpha(20),
+                                    color: AppColors.black.withAlpha(200),
                                     blurRadius: 4,
                                     offset: const Offset(0, 2),
                                   ),
@@ -385,14 +377,14 @@ class _HomeState extends State<Home> {
                                 children: [
                                   Icon(
                                     getTimerIcon(item.timerStatus),
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     size: 12,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     item.getTimerStatusText(),
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.white,
                                       fontSize: 9,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -412,11 +404,11 @@ class _HomeState extends State<Home> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.red,
+                                color: AppColors.red,
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withAlpha(20),
+                                    color: AppColors.black.withAlpha(200),
                                     blurRadius: 4,
                                     offset: const Offset(0, 2),
                                   ),
@@ -425,7 +417,7 @@ class _HomeState extends State<Home> {
                               child: Text(
                                 '${item.discountFlashSale}% OFF',
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -454,12 +446,12 @@ class _HomeState extends State<Home> {
                                         Text(
                                           item.nama,
                                           style: const TextStyle(
-                                            color: Colors.white,
+                                            color: AppColors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             shadows: [
                                               Shadow(
-                                                color: Colors.black54,
+                                                color: AppColors.black,
                                                 blurRadius: 4,
                                               ),
                                             ],
@@ -471,11 +463,11 @@ class _HomeState extends State<Home> {
                                         Text(
                                           '${item.startTime.day}/${item.startTime.month} - ${item.endTime.day}/${item.endTime.month}',
                                           style: const TextStyle(
-                                            color: Colors.white,
+                                            color: AppColors.white,
                                             fontSize: 10,
                                             shadows: [
                                               Shadow(
-                                                color: Colors.black54,
+                                                color: AppColors.black,
                                                 blurRadius: 4,
                                               ),
                                             ],
@@ -487,12 +479,11 @@ class _HomeState extends State<Home> {
                                   Container(
                                     padding: const EdgeInsets.all(6),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withAlpha(20),
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Icon(
                                       Icons.arrow_forward_ios,
-                                      color: Colors.white,
+                                      color: AppColors.white,
                                       size: 12,
                                     ),
                                   ),
@@ -522,7 +513,7 @@ class _HomeState extends State<Home> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
+                      color: AppColors.black,
                     ),
                   ),
                   if (eventShop.isNotEmpty)
@@ -533,24 +524,20 @@ class _HomeState extends State<Home> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.blue[50],
+                        color: AppColors.blue,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.event,
-                            size: 14,
-                            color: Colors.blue[700],
-                          ),
+                          Icon(Icons.event, size: 14, color: AppColors.white),
                           const SizedBox(width: 4),
                           Text(
                             '${eventShop.length} Event',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue[700],
+                              color: AppColors.white,
                             ),
                           ),
                         ],
@@ -608,8 +595,8 @@ class _HomeState extends State<Home> {
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
                                 colors: [
-                                  Colors.black.withAlpha(200),
-                                  Colors.transparent,
+                                  AppColors.black.withAlpha(200),
+                                  AppColors.transparent,
                                 ],
                               ),
                             ),
@@ -619,7 +606,7 @@ class _HomeState extends State<Home> {
                                 Text(
                                   item.name,
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
@@ -634,13 +621,13 @@ class _HomeState extends State<Home> {
                                     Text(
                                       '${item.startDate.day}/${item.startDate.month} - ${item.endDate.day}/${item.endDate.month}',
                                       style: const TextStyle(
-                                        color: Colors.white70,
+                                        color: AppColors.white,
                                         fontSize: 11,
                                       ),
                                     ),
                                     const Icon(
                                       Icons.arrow_forward_ios,
-                                      color: Colors.white,
+                                      color: AppColors.white,
                                       size: 14,
                                     ),
                                   ],
@@ -663,7 +650,7 @@ class _HomeState extends State<Home> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
+                  color: AppColors.black,
                 ),
               ),
             ),
@@ -692,7 +679,7 @@ class _HomeState extends State<Home> {
                           Text(
                             controller.errorMessage.value,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.red),
+                            style: const TextStyle(color: AppColors.red),
                           ),
                           const SizedBox(height: 10),
                           ElevatedButton(
@@ -775,7 +762,7 @@ class _HomeState extends State<Home> {
                                                     child: Icon(
                                                       Icons.broken_image,
                                                       size: 50,
-                                                      color: Colors.grey,
+                                                      color: AppColors.grey,
                                                     ),
                                                   ),
                                         ),
@@ -791,14 +778,14 @@ class _HomeState extends State<Home> {
                                               vertical: 2,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: Colors.red,
+                                              color: AppColors.red,
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                             ),
                                             child: Text(
                                               '-${product.discountPercentage.toStringAsFixed(2)}%',
                                               style: const TextStyle(
-                                                color: Colors.white,
+                                                color: AppColors.white,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -816,14 +803,14 @@ class _HomeState extends State<Home> {
                                               vertical: 2,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: Colors.orange,
+                                              color: AppColors.orange,
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                             ),
                                             child: const Text(
                                               '⚡ FLASH',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: AppColors.white,
                                                 fontSize: 9,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -857,7 +844,7 @@ class _HomeState extends State<Home> {
                                           product.categoryName!,
                                           style: TextStyle(
                                             fontSize: 10,
-                                            color: Colors.grey[600],
+                                            color: AppColors.grey,
                                           ),
                                         ),
                                       if (product.rating != null)
@@ -866,7 +853,7 @@ class _HomeState extends State<Home> {
                                             const Icon(
                                               Icons.star,
                                               size: 12,
-                                              color: Colors.amber,
+                                              color: AppColors.yellow,
                                             ),
                                             const SizedBox(width: 2),
                                             Text(
@@ -886,7 +873,7 @@ class _HomeState extends State<Home> {
                                           product.formattedOriginalPrice,
                                           style: TextStyle(
                                             fontSize: 10,
-                                            color: Colors.grey[600],
+                                            color: AppColors.grey,
                                             decoration:
                                                 TextDecoration.lineThrough,
                                           ),
@@ -894,7 +881,7 @@ class _HomeState extends State<Home> {
                                         Text(
                                           product.formattedPrice,
                                           style: const TextStyle(
-                                            color: Colors.redAccent,
+                                            color: AppColors.red,
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -903,7 +890,7 @@ class _HomeState extends State<Home> {
                                         Text(
                                           product.formattedPrice,
                                           style: const TextStyle(
-                                            color: Colors.redAccent,
+                                            color: AppColors.red,
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -914,8 +901,8 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                           fontSize: 10,
                                           color: product.stock > 0
-                                              ? Colors.green
-                                              : Colors.red,
+                                              ? AppColors.green
+                                              : AppColors.red,
                                         ),
                                       ),
                                     ],
@@ -938,7 +925,7 @@ class _HomeState extends State<Home> {
                                 Get.toNamed(AppRoutes.searchresultpage),
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 12),
-                              side: const BorderSide(color: Colors.blue),
+                              side: const BorderSide(color: AppColors.blue),
                             ),
                             child: const Text('Lihat Semua Produk'),
                           ),
@@ -968,8 +955,8 @@ class _HomeState extends State<Home> {
             const SizedBox(height: 4),
             Text(
               description,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 10, color: Colors.black54),
+              textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: 10, color: AppColors.black),
             ),
           ],
         ),
@@ -982,13 +969,13 @@ class _HomeState extends State<Home> {
     for (var popup in controller.popupAds) {
       await Get.dialog(
         Dialog(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
           insetPadding: const EdgeInsets.all(20),
           child: Stack(
             alignment: Alignment.center,
             children: [
               Container(
-                color: Colors.transparent,
+                color: AppColors.transparent,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -1013,7 +1000,7 @@ class _HomeState extends State<Home> {
                       child: const Text(
                         'Tutup',
                         style: TextStyle(
-                          color: Colors.red,
+                          color: AppColors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -1036,8 +1023,8 @@ class _HomeState extends State<Home> {
         Get.snackbar(
           'Error',
           'URL tidak valid',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
         return;
@@ -1049,8 +1036,8 @@ class _HomeState extends State<Home> {
         Get.snackbar(
           'Error',
           'Tidak dapat membuka tautan $url',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.TOP,
         );
       }
@@ -1058,8 +1045,8 @@ class _HomeState extends State<Home> {
       Get.snackbar(
         'Error',
         'Terjadi kesalahan: $e',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.TOP,
       );
     }

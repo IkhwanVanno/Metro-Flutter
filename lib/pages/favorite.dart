@@ -5,6 +5,7 @@ import 'package:metro/controller/favorite_controller.dart';
 import 'package:metro/models/product_model.dart';
 import 'package:metro/pages/product_detail_page.dart';
 import 'package:metro/routes/app_routes.dart';
+import 'package:metro/theme/app_theme.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -31,14 +32,14 @@ class _FavoritePageState extends State<FavoritePage> {
       appBar: AppBar(
         title: const Text(
           'Favorit Saya',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: AppColors.black),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.accent,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: AppColors.black),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Obx(() {
         if (!authController.isLoggedIn) {
           return _buildLoginPrompt();
@@ -58,13 +59,13 @@ class _FavoritePageState extends State<FavoritePage> {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.blue.withAlpha(25),
+                color: AppColors.primary.withAlpha(25),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.favorite_border,
                 size: 80,
-                color: Colors.blue,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 32),
@@ -73,21 +74,21 @@ class _FavoritePageState extends State<FavoritePage> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
             const SizedBox(height: 12),
             const Text(
               'Please login to view your favorite products',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: AppColors.grey),
             ),
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -100,7 +101,7 @@ class _FavoritePageState extends State<FavoritePage> {
                   'Login Now',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -112,7 +113,7 @@ class _FavoritePageState extends State<FavoritePage> {
               children: [
                 const Text(
                   "Don't have an account? ",
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: AppColors.grey),
                 ),
                 TextButton(
                   onPressed: () {
@@ -121,7 +122,7 @@ class _FavoritePageState extends State<FavoritePage> {
                   child: const Text(
                     'Register',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -147,7 +148,7 @@ class _FavoritePageState extends State<FavoritePage> {
           return const Center(
             child: Text(
               'Belum ada produk favorit',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: AppColors.grey),
             ),
           );
         }
@@ -213,7 +214,7 @@ class _FavoritePageState extends State<FavoritePage> {
                             Text(
                               product.formattedPrice,
                               style: const TextStyle(
-                                color: Colors.red,
+                                color: AppColors.red,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -223,7 +224,7 @@ class _FavoritePageState extends State<FavoritePage> {
                               children: [
                                 const Icon(
                                   Icons.star,
-                                  color: Colors.amber,
+                                  color: AppColors.yellow,
                                   size: 16,
                                 ),
                                 const SizedBox(width: 4),
@@ -239,8 +240,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: product.stock > 0
-                                        ? Colors.green
-                                        : Colors.red,
+                                        ? AppColors.green
+                                        : AppColors.red,
                                   ),
                                 ),
                               ],
@@ -252,7 +253,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     IconButton(
                       icon: const Icon(
                         Icons.delete_outline,
-                        color: Colors.redAccent,
+                        color: AppColors.red,
                       ),
                       onPressed: () {
                         Get.defaultDialog(
@@ -261,8 +262,8 @@ class _FavoritePageState extends State<FavoritePage> {
                               'Apakah kamu yakin ingin menghapus produk ini?',
                           textCancel: 'Batal',
                           textConfirm: 'Hapus',
-                          confirmTextColor: Colors.white,
-                          buttonColor: Colors.redAccent,
+                          confirmTextColor: AppColors.white,
+                          buttonColor: AppColors.red,
                           onConfirm: () {
                             favoriteController.removeFromFavorite(fav.id);
                             Get.back();
