@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:metro/controller/product_controller.dart';
-import 'package:metro/pages/product_detail_page.dart';
+import 'package:metro/routes/app_routes.dart';
 import 'package:metro/theme/app_theme.dart';
 
 class SearchResultPage extends StatelessWidget {
@@ -147,8 +147,10 @@ class SearchResultPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final product = results[index];
                     return GestureDetector(
-                      onTap: () =>
-                          Get.to(() => ProductDetailPage(product: product)),
+                      onTap: () => Get.toNamed(
+                        AppRoutes.productdetailpage,
+                        arguments: product,
+                      ),
                       child: Card(
                         elevation: 2,
                         shape: RoundedRectangleBorder(
@@ -157,36 +159,42 @@ class SearchResultPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Product Image with Badges
-                            Expanded(
+                            // Thumbnail seragam
+                            Container(
+                              height: 150,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(12),
+                                ),
+                                color: Colors.grey[200],
+                              ),
+                              clipBehavior: Clip.antiAlias,
                               child: Stack(
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(12),
-                                    ),
+                                  Positioned.fill(
                                     child: Image.network(
                                       product.imageUrl,
                                       fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      loadingBuilder:
-                                          (context, child, progress) {
-                                            if (progress == null) return child;
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          },
-                                      errorBuilder: (context, error, stack) =>
+                                      errorBuilder: (_, __, ___) =>
                                           const Center(
                                             child: Icon(
                                               Icons.broken_image,
-                                              size: 50,
+                                              size: 40,
                                               color: AppColors.grey,
                                             ),
                                           ),
+                                      loadingBuilder: (_, child, progress) {
+                                        if (progress == null) return child;
+                                        return const Center(
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
+
                                   // Discount Badge
                                   if (product.hasDiscount)
                                     Positioned(
@@ -204,15 +212,16 @@ class SearchResultPage extends StatelessWidget {
                                           ),
                                         ),
                                         child: Text(
-                                          '-${product.discountPercentage.toStringAsFixed(2)}%',
+                                          '-${product.discountPercentage.toStringAsFixed(0)}%',
                                           style: const TextStyle(
-                                            color: AppColors.white,
+                                            color: Colors.white,
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
                                     ),
+
                                   // Flash Sale Badge
                                   if (product.hasFlashsale)
                                     Positioned(
@@ -232,7 +241,7 @@ class SearchResultPage extends StatelessWidget {
                                         child: const Text(
                                           '⚡ FLASH',
                                           style: TextStyle(
-                                            color: AppColors.white,
+                                            color: Colors.white,
                                             fontSize: 9,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -242,72 +251,103 @@ class SearchResultPage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            // Product Info
+
+                            // Text area seragam & rapih
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Nama produk 
                                   Text(
                                     product.name,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.2,
+                                    ),
                                   ),
-                                  const SizedBox(height: 4),
-                                  if (product.categoryName != null)
-                                    Text(
-                                      product.categoryName!,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: AppColors.grey,
-                                      ),
-                                    ),
-                                  if (product.rating != null)
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.star,
-                                          size: 12,
-                                          color: AppColors.yellow,
+
+                                  const SizedBox(height: 6),
+
+                                  // Category + Rating baris
+                                  Row(
+                                    children: [
+                                      // Category
+                                      if (product.categoryName != null)
+                                        Expanded(
+                                          child: Text(
+                                            product.categoryName!,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: AppColors.grey,
+                                            ),
+                                          ),
                                         ),
-                                        const SizedBox(width: 2),
-                                        Text(
-                                          product.rating!.toStringAsFixed(1),
-                                          style: const TextStyle(fontSize: 11),
+
+                                      // Rating
+                                      if (product.rating != null)
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              size: 12,
+                                              color: AppColors.yellow,
+                                            ),
+                                            const SizedBox(width: 2),
+                                            Text(
+                                              product.rating!.toStringAsFixed(
+                                                1,
+                                              ),
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  const SizedBox(height: 4),
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 6),
+
+                                  // Harga
                                   if (product.hasDiscount) ...[
                                     Text(
                                       product.formattedOriginalPrice,
                                       style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
                                         fontSize: 10,
                                         color: AppColors.grey,
-                                        decoration: TextDecoration.lineThrough,
                                       ),
                                     ),
+                                    const SizedBox(height: 2),
                                     Text(
                                       product.formattedPrice,
                                       style: const TextStyle(
-                                        color: AppColors.red,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
+                                        color: AppColors.red,
+                                        height: 1,
                                       ),
                                     ),
-                                  ] else
+                                  ] else ...[
                                     Text(
                                       product.formattedPrice,
                                       style: const TextStyle(
-                                        color: AppColors.red,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
+                                        color: AppColors.red,
+                                        height: 1,
                                       ),
                                     ),
+                                  ],
+
+                                  const SizedBox(height: 6),
+
+                                  // Stock Info
                                   Text(
                                     'Stok: ${product.stock}',
                                     style: TextStyle(

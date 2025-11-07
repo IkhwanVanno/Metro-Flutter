@@ -33,9 +33,9 @@ class Flashsale {
     // Parse timer_status dari API
     TimerStatus parseTimerStatus(String? status) {
       switch (status?.toLowerCase()) {
-        case 'upcoming':
+        case 'coming_soon':
           return TimerStatus.upcoming;
-        case 'ongoing':
+        case 'active':
           return TimerStatus.ongoing;
         case 'expired':
           return TimerStatus.expired;

@@ -190,7 +190,9 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
                               gradient: LinearGradient(
                                 colors: [
                                   flashsale!.getTimerStatusColor(),
-                                  flashsale!.getTimerStatusColor().withAlpha(70)
+                                  flashsale!.getTimerStatusColor().withAlpha(
+                                    70,
+                                  ),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -501,119 +503,191 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
-            Expanded(
+            // Thumbnail seragam
+            Container(
+              height: 150,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
+                color: Colors.grey[200],
+              ),
+              clipBehavior: Clip.antiAlias,
               child: Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
+                  Positioned.fill(
                     child: Image.network(
                       product.imageUrl,
                       fit: BoxFit.cover,
-                      width: double.infinity,
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return const Center(child: CircularProgressIndicator());
-                      },
-                      errorBuilder: (context, error, stack) => const Center(
+                      errorBuilder: (_, __, ___) => const Center(
                         child: Icon(
                           Icons.broken_image,
-                          size: 50,
+                          size: 40,
                           color: AppColors.grey,
                         ),
                       ),
+                      loadingBuilder: (_, child, progress) {
+                        if (progress == null) return child;
+                        return const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        );
+                      },
                     ),
                   ),
-                  // Flash Sale Badge
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.red,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.black.withAlpha(50),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
+
+                  // Discount Badge
+                  if (product.hasDiscount)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.red,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '-${product.discountPercentage.toStringAsFixed(0)}%',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
-                      child: Text(
-                        '-${flashsale!.discountFlashSale}%',
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ),
+
+                  // Flash Sale Badge
+                  if (product.hasFlashsale)
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.orange,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          '⚡ FLASH',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
-            // Product Info
+
+            // Text area seragam & rapih
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Nama produk
                   Text(
                     product.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  if (product.categoryName != null)
-                    Text(
-                      product.categoryName!,
-                      style: TextStyle(fontSize: 10, color: AppColors.grey),
-                    ),
-                  if (product.rating != null)
-                    Row(
-                      children: [
-                        const Icon(Icons.star, size: 12, color: AppColors.yellow),
-                        const SizedBox(width: 2),
-                        Text(
-                          product.rating!.toStringAsFixed(1),
-                          style: const TextStyle(fontSize: 11),
-                        ),
-                      ],
-                    ),
-                  const SizedBox(height: 4),
-                  // Price
-                  Text(
-                    product.formattedOriginalPrice,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: AppColors.grey,
-                      decoration: TextDecoration.lineThrough,
-                    ),
-                  ),
-                  Text(
-                    product.formattedPrice,
                     style: const TextStyle(
-                      color: AppColors.red,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      height: 1.2,
                     ),
                   ),
+
+                  const SizedBox(height: 6),
+
+                  // Category + Rating baris
+                  Row(
+                    children: [
+                      // Category
+                      if (product.categoryName != null)
+                        Expanded(
+                          child: Text(
+                            product.categoryName!,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.grey,
+                            ),
+                          ),
+                        ),
+
+                      // Rating
+                      if (product.rating != null)
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              size: 12,
+                              color: AppColors.yellow,
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              product.rating!.toStringAsFixed(1),
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  // Harga
+                  if (product.hasDiscount) ...[
+                    Text(
+                      product.formattedOriginalPrice,
+                      style: TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        fontSize: 10,
+                        color: AppColors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      product.formattedPrice,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.red,
+                        height: 1,
+                      ),
+                    ),
+                  ] else ...[
+                    Text(
+                      product.formattedPrice,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.red,
+                        height: 1,
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 6),
+
+                  // Stock Info
                   Text(
                     'Stok: ${product.stock}',
                     style: TextStyle(
                       fontSize: 10,
-                      color: product.stock > 0 ? AppColors.green : AppColors.red,
+                      color: product.stock > 0
+                          ? AppColors.green
+                          : AppColors.red,
                     ),
                   ),
                 ],
