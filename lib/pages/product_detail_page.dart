@@ -34,6 +34,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.product.name, overflow: TextOverflow.ellipsis),
+        centerTitle: true,
+        backgroundColor: AppColors.primary,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -167,7 +169,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(width: 8),
                       ],
                       if (widget.product.rating != null) ...[
-                        const Icon(Icons.star, size: 16, color: AppColors.yellow,),
+                        const Icon(
+                          Icons.star,
+                          size: 16,
+                          color: AppColors.yellow,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           widget.product.rating!.toStringAsFixed(1),
@@ -477,10 +483,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(height: 4),
                         Text(
                           '${reviews.length} ulasan',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.grey,
-                          ),
+                          style: TextStyle(fontSize: 12, color: AppColors.grey),
                         ),
                       ],
                     ),

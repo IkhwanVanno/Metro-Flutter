@@ -15,7 +15,7 @@ class SearchResultPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.primary,
         elevation: 1,
         title: TextField(
           controller: searchController,

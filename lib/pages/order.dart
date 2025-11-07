@@ -33,7 +33,7 @@ class _OrderPageState extends State<OrderPage> {
           'Pesanan Saya',
           style: TextStyle(color: AppColors.black),
         ),
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.primary,
         elevation: 1,
         centerTitle: true,
         iconTheme: const IconThemeData(color: AppColors.black),

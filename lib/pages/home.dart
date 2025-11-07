@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
         child: Obx(() {
           final site = siteController.siteConfig.value;
           return AppBar(
-            backgroundColor: AppColors.accent,
+            backgroundColor: AppColors.primary,
             elevation: 1,
             titleSpacing: 0,
             title: Row(

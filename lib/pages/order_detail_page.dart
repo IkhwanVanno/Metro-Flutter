@@ -58,7 +58,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           'Detail Pesanan',
           style: TextStyle(color: AppColors.black),
         ),
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.primary,
         elevation: 1,
         centerTitle: true,
         iconTheme: const IconThemeData(color: AppColors.black),

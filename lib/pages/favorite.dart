@@ -34,7 +34,7 @@ class _FavoritePageState extends State<FavoritePage> {
           'Favorit Saya',
           style: TextStyle(color: AppColors.black),
         ),
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.primary,
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: AppColors.black),

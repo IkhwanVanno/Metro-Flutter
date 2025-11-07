@@ -60,7 +60,7 @@ class _EventshopDetailPageState extends State<EventshopDetailPage> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.primary,
         elevation: 1,
         centerTitle: true,
         leading: IconButton(

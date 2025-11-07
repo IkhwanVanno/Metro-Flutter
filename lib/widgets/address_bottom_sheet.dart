@@ -131,12 +131,12 @@ class AddressBottomSheet extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: isSelected ? AppColors.blue : AppColors.grey,
+                          color: isSelected ? AppColors.primary : AppColors.grey,
                           width: isSelected ? 2 : 1,
                         ),
                         borderRadius: BorderRadius.circular(12),
                         color: isSelected
-                            ? AppColors.blue.withAlpha(30)
+                            ? AppColors.primary.withAlpha(30)
                             : AppColors.white,
                       ),
                       child: Column(

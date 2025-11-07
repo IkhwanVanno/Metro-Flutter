@@ -60,7 +60,7 @@ class _FlashsaleDetailPageState extends State<FlashsaleDetailPage> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.primary,
         elevation: 1,
         centerTitle: true,
         leading: IconButton(

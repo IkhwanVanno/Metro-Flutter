@@ -36,9 +36,9 @@ class _MainPageState extends State<MainPage> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        backgroundColor: AppColors.primary,
-        selectedItemColor:AppColors.light,
-        unselectedItemColor: AppColors.secondary,
+        backgroundColor: AppColors.white,
+        selectedItemColor:AppColors.black,
+        unselectedItemColor: AppColors.black,
         showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(
