@@ -1,91 +1,138 @@
-🛍️ MetroShoppingG E-Commerce
-Aplikasi E-Commerce berbasis Flutter dengan integrasi Firebase untuk autentikasi, notifikasi, dan manajemen data produk.
-Project ini dirancang dengan arsitektur modular, konfigurasi dinamis, dan kemudahan dalam pengaturan environment.
+# 🛍️ MetroShoppingG - Flutter E-Commerce App
 
-🚀 Persyaratan Sistem
-Sebelum menjalankan proyek ini, pastikan kamu sudah menginstal:
-Flutter SDK
- (versi terbaru)
-Dart SDK
-Android Studio
- atau Visual Studio Code
-Firebase Console
-Emulator Android / iOS atau perangkat fisik
+**MetroShoppingG** adalah aplikasi **E-Commerce** berbasis **Flutter** yang terintegrasi dengan **Firebase**.
+Aplikasi ini dirancang untuk memberikan pengalaman berbelanja modern dan cepat, dengan sistem autentikasi, pengelolaan produk, dan notifikasi real-time menggunakan Firebase.
 
-MetroShoppingG/
-│
-├── lib/
-│   ├── config/
-│   │   └── app_config.dart       # File konfigurasi baseUrl API
-│   ├── firebase_options.dart     # File konfigurasi Firebase
-│   └── main.dart                 # Entry point aplikasi
-│
-├── android/
-│   └── app/
-│       └── google-services.json  # Konfigurasi Firebase Android
-│
-├── ios/
-│   └── Runner/
-│       └── GoogleService-Info.plist # Konfigurasi Firebase iOS
-│
-├── firebase.json                 # Konfigurasi Firebase project
-└── pubspec.yaml                  # Dependency Flutter
+---
 
-⚙️ Setup Proyek
-Ikuti langkah-langkah berikut untuk men-setup proyek di lokal:
+## 🚀 Fitur Utama
 
-1️⃣ Clone Repositori
-git clone https://github.com/yourusername/MetroShoppingG.git
+* 🛒 Lihat dan beli produk secara online
+* 🔐 Login & autentikasi menggunakan **Firebase Auth**
+* 🧾 Menampilkan detail produk dan keranjang belanja
+* 📦 Sinkronisasi data melalui **Firebase Realtime/Firestore**
+* 🔔 Notifikasi push untuk update dan promo
+
+---
+
+## 📦 Persiapan Awal
+
+### 1. Clone Project dan Install Dependency
+
+```bash
+git clone <repository-url>
 cd MetroShoppingG
-
-2️⃣ Install Dependency
 flutter pub get
+```
 
-3️⃣ Konfigurasi Base URL API
-Buka file:
-lib/config/app_config.dart
-Lalu ubah nilai baseUrl sesuai endpoint API kamu:
-class AppConfig {
-  static const String baseUrl = "https://your-api-url.com/api/";
-}
+### 2. Jalankan Project
 
-🔥 Integrasi Firebase
-Untuk mengaktifkan Firebase pada proyek ini, ikuti langkah-langkah berikut:
+```bash
+flutter run
+```
 
-4️⃣ Tambahkan File Konfigurasi Firebase
-Tempel file berikut ke dalam lokasi yang sesuai:
+---
+
+## ⚙️ Konfigurasi API (baseUrl)
+
+1. Buka file:
+
+   ```
+   lib/config/app_config.dart
+   ```
+
+2. Ubah `baseUrl` sesuai endpoint API kamu:
+
+   ```dart
+   class AppConfig {
+     static const String baseUrl = "https://your-api-url.com/api/";
+   }
+   ```
+
+---
+
+## 🔥 Integrasi Firebase
+
+### 1. Siapkan Firebase Project
+
+1. Buka [Firebase Console](https://console.firebase.google.com/)
+2. Buat project baru (misal: **MetroShoppingG**)
+3. Tambahkan aplikasi Android dan iOS:
+
+   * Android: masukkan `applicationId` (misal `com.example.metroshoppingg`)
+   * iOS: masukkan `Bundle ID` (misal `com.example.metroshoppingg`)
+
+---
+
+### 2. Unduh File Konfigurasi Firebase
+
+Unduh file berikut dari Firebase dan tempel ke lokasi sesuai tabel berikut:
+
 | File                       | Lokasi                                |
 | -------------------------- | ------------------------------------- |
-| `firebase.json`            | di root project (`/`)                 |
+| `firebase.json`            | `firebase.json` *(root project)*      |
 | `firebase_options.dart`    | `lib/firebase_options.dart`           |
 | `google-services.json`     | `android/app/google-services.json`    |
 | `GoogleService-Info.plist` | `ios/Runner/GoogleService-Info.plist` |
 
-⚠️ Catatan: Pastikan semua file berasal dari Firebase Console yang sesuai dengan package name aplikasi kamu.
+---
 
-▶️ Jalankan Aplikasi
-Setelah konfigurasi selesai, jalankan perintah berikut:
-flutter run
+### 3. Tambahkan SHA-1 untuk Login Google (opsional)
 
-Atau tentukan platform secara spesifik:
-flutter run -d chrome        # Untuk Web
-flutter run -d emulator-5554 # Untuk Android Emulator
-flutter run -d ios           # Untuk iOS
+Jika login Google tidak berfungsi, tambahkan **SHA-1 key** ke Firebase Console:
+Firebase Console → Project Settings → Android App → Tambahkan SHA-1.
 
-🧩 Build Release
-Untuk Android:
+#### Cara cek SHA-1 debug:
+
+```bash
+.\gradlew signingReport
+```
+
+atau
+
+```bash
+keytool -list -v -keystore "C:\Users\<USERNAME>\.android\debug.keystore" -storepass android
+```
+
+Jika belum ada, buat debug keystore:
+
+```bash
+keytool -genkey -v -keystore "C:\Users\<USERNAME>\.android\debug.keystore" -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -alias androiddebugkey -dname "CN=Android Debug,O=Android,C=US"
+```
+
+---
+
+## 🧩 Build Aplikasi
+
+### Untuk Android:
+
+```bash
 flutter build apk --release
-Untuk iOS:
+```
+
+### Untuk iOS:
+
+```bash
 flutter build ios --release
+```
 
-📚 Catatan Tambahan
-Pastikan koneksi internet aktif untuk mengakses API dan Firebase.
-Gunakan flutter clean jika ada error build setelah menyalin file Firebase.
-Jika ada masalah autentikasi Firebase, periksa kembali google-services.json dan GoogleService-Info.plist.
+---
 
-👨‍💻 Pengembang
+## 📚 Referensi
 
-MetroShoppingG E-Commerce
-Dikembangkan oleh Ikhwan Vanno
-📧 Email: [ikhwanvanno750@gmail.com]
-📅 Tahun: 2025
+* [Flutter Documentation](https://docs.flutter.dev)
+* [Firebase Console](https://console.firebase.google.com/)
+* [FlutterFire (Integrasi Firebase dengan Flutter)](https://firebase.flutter.dev/)
+* [Google Sign-In for Flutter](https://pub.dev/packages/google_sign_in)
+
+---
+
+## 🛠 Teknologi yang Digunakan
+
+* Flutter SDK
+* Firebase Authentication & Firestore
+* REST API Integration
+* Material Design
+* State Management (Provider / GetX)
+
+---
